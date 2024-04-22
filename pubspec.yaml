@@ -82,6 +82,8 @@ flutter:
     - lib/images/slide3.png
     - lib/images/vector1.png
     - lib/images/vector2.png
+    - lib/images/checked.png
+    - lib/images/unchecked.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
