@@ -25,16 +25,23 @@ class _LessonList extends StatelessWidget {
     'Writing',
   ];
 
-
   @override
   Widget build(BuildContext context) {
-    return ListView.separated(
-      padding: const EdgeInsets.all(8),
-      itemCount: lessons.length,
-      itemBuilder: (BuildContext context, int index) {
-        return LessonTile(lesson: lessons[index], index: index);
-      },
-      separatorBuilder: (BuildContext context, int index) => const Divider(),
+    return Column(
+      children: [
+        SizedBox(height: 50), // Add spacing here
+        Expanded(
+          child: ListView.separated(
+            padding: const EdgeInsets.all(15),
+            itemCount: lessons.length,
+            itemBuilder: (BuildContext context, int index) {
+              return LessonTile(lesson: lessons[index], index: index);
+            },
+            separatorBuilder: (BuildContext context, int index) =>
+            const Divider(),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -59,19 +66,22 @@ class LessonTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-
       padding: EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: trainingTileColor,
         borderRadius: BorderRadius.circular(10),
       ),
-      child: ListTile(
-        leading: images[index],
-        title: Text(_LessonList().lessons[index]),
-        textColor: Colors.white,
-        onTap: () {
-          // Navigate to lesson details or perform an action
-        },
+      child: Column(
+        children: [
+          ListTile(
+            leading: images[index],
+            title: Text(_LessonList().lessons[index]),
+            textColor: Colors.white,
+            onTap: () {
+              // Navigate to lesson details or perform an action
+            },
+          ),
+        ],
       ),
     );
   }
