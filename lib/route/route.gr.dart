@@ -12,12 +12,12 @@ import 'package:auto_route/auto_route.dart' as _i8;
 import 'package:english_hakaton/pages/authDirectory/login_page.dart' as _i3;
 import 'package:english_hakaton/pages/authDirectory/register_page.dart' as _i5;
 import 'package:english_hakaton/pages/authDirectory/start_page.dart' as _i6;
-import 'package:english_hakaton/pages/authDirectory/voise_assistant_bool.dart'
-    as _i7;
 import 'package:english_hakaton/pages/general/chat/chat_page.dart' as _i1;
 import 'package:english_hakaton/pages/general/chat/person_of_chat_page.dart'
     as _i4;
 import 'package:english_hakaton/pages/general/general_page.dart' as _i2;
+import 'package:english_hakaton/pages/general/training/training_page.dart'
+    as _i7;
 import 'package:flutter/material.dart' as _i9;
 
 abstract class $AppRouter extends _i8.RootStackRouter {
@@ -66,10 +66,10 @@ abstract class $AppRouter extends _i8.RootStackRouter {
         child: const _i6.StartPage(),
       );
     },
-    VoiceAssistantRoute.name: (routeData) {
+    TrainingRoute.name: (routeData) {
       return _i8.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i7.VoiceAssistantPage(),
+        child: const _i7.TrainingPage(),
       );
     },
   };
@@ -189,15 +189,15 @@ class StartRoute extends _i8.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i7.VoiceAssistantPage]
-class VoiceAssistantRoute extends _i8.PageRouteInfo<void> {
-  const VoiceAssistantRoute({List<_i8.PageRouteInfo>? children})
+/// [_i7.TrainingPage]
+class TrainingRoute extends _i8.PageRouteInfo<void> {
+  const TrainingRoute({List<_i8.PageRouteInfo>? children})
       : super(
-          VoiceAssistantRoute.name,
+          TrainingRoute.name,
           initialChildren: children,
         );
 
-  static const String name = 'VoiceAssistantRoute';
+  static const String name = 'TrainingRoute';
 
   static const _i8.PageInfo<void> page = _i8.PageInfo<void>(name);
 }
