@@ -44,6 +44,7 @@ dependencies:
   fl_chart: ^0.67.0
   pie_chart: ^5.4.0
   flutter_chat_ui: ^1.6.12
+  flutter_tts: ^4.0.2
 
 dev_dependencies:
   flutter_test:
@@ -63,6 +64,7 @@ dev_dependencies:
   fl_chart: ^0.67.0
   pie_chart: ^5.4.0
   flutter_chat_ui: ^1.6.12
+  flutter_tts: ^4.0.2
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -82,6 +84,7 @@ flutter:
     - lib/images/slide3.png
     - lib/images/vector1.png
     - lib/images/vector2.png
+    - lib/images/background_robot.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

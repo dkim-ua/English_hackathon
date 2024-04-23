@@ -1,7 +1,8 @@
 import 'package:auto_route/annotations.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:english_hakaton/pages/authDirectory/register_page.dart';
+import 'package:english_hakaton/class/constant.dart';
+import 'package:english_hakaton/class/voise_assistant_tts.dart';
 import 'package:english_hakaton/route/route.gr.dart';
 import 'package:english_hakaton/theme/main_theme.dart';
 import 'package:flutter/material.dart';
@@ -11,14 +12,24 @@ import 'login_page.dart';
 @RoutePage()
 class StartPage extends StatefulWidget {
   const StartPage({super.key});
-
   @override
   State<StartPage> createState() => _StartPageState();
 }
 
 class _StartPageState extends State<StartPage> {
-  final List<Image> carouselItems = [Image.asset('lib/images/slide1.png'), Image.asset('lib/images/slide2.png'), Image.asset('lib/images/slide3.png')];
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    ttsSpeakPage();
+  }
 
+  void ttsSpeakPage(){
+    if (isVoiceAssistant == true) {
+      VoiceAssistantTextToSpeech().speak("Чи є у вас акаунт? Якщо так - скажіть увійти, якщо ні - скажіть реєстрація", "uk-UA");
+    }
+  }
+  final List<Image> carouselItems = [Image.asset('lib/images/slide1.png'), Image.asset('lib/images/slide2.png'), Image.asset('lib/images/slide3.png')];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,6 +61,7 @@ class _StartPageState extends State<StartPage> {
                     borderRadius: BorderRadius.circular(18.0)),),),
               child: Text('ПОЧАТИ', style: TextStyle(fontSize: 24, color: backgroundColor,)),
               onPressed: () {
+                VoiceAssistantTextToSpeech().stop();
                 context.router.push(const RegisterRoute());
               },
             ),
@@ -65,6 +77,7 @@ class _StartPageState extends State<StartPage> {
               child: Text('ВЖЕ МАЮ АККАУНТ', style: TextStyle(fontSize: 24, color: mainColor),),
               onPressed: () {
                 // Handle I already have an account
+                VoiceAssistantTextToSpeech().stop();
                 context.router.push(const LoginRoute());
               },
             ),

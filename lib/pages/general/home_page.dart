@@ -1,6 +1,9 @@
 import 'package:english_hakaton/theme/main_theme.dart';
 import 'package:flutter/material.dart';
 
+import '../../class/constant.dart';
+import '../../class/voise_assistant_tts.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -9,6 +12,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    ttsSpeakPage();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,5 +79,18 @@ class LessonTile extends StatelessWidget {
         },
       ),
     );
+  }
+}
+void ttsSpeakPage(){
+  if (isVoiceAssistant == true) {
+    VoiceAssistantTextToSpeech()
+        .speak("Ви знаходитесь на головній сторінці.", languages[1]); // TODO: Make logic of unit and lessons
+    VoiceAssistantTextToSpeech()
+        .speak("Юніт 1. Лесон 1.", languages[1]);
+    VoiceAssistantTextToSpeech()
+        .speak("Якщо бажаєте почати урок, скажіть - почати урок, якщо перейти на іншу сторінку, назвіть"
+        "її назву із запропонованних:", languages[1]);
+    VoiceAssistantTextToSpeech()
+        .speak("Тренування. Чат. Словник. Профіль.", languages[1]);
   }
 }
