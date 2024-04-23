@@ -1,11 +1,8 @@
 import 'package:auto_route/annotations.dart';
-import 'package:auto_route/auto_route.dart';
 import 'package:english_hakaton/pages/general/home_page.dart';
 import 'package:english_hakaton/pages/general/chat/person_of_chat_page.dart';
 import 'package:english_hakaton/pages/general/profile/profile_page.dart';
-import 'package:english_hakaton/pages/general/training/training_page.dart';
 import 'package:english_hakaton/pages/general/vocabulary/vocabulary_page.dart';
-import 'package:english_hakaton/route/route.gr.dart';
 import 'package:flutter/material.dart';
 
 @RoutePage()
@@ -34,23 +31,23 @@ class _GeneralPageState extends State<GeneralPage> {
         destinations: const <Widget>[
           NavigationDestination(
             icon: Icon(Icons.home),
-            label: 'Головна',
+            label: 'Home',
           ),
           NavigationDestination(
             icon: Icon(Icons.model_training_rounded),
-            label: 'Тренуватися',
+            label: 'Training',
           ),
           NavigationDestination(
             icon: Icon(Icons.mark_chat_unread_outlined),
-            label: 'Чат',
+            label: 'Chat',
           ),
           NavigationDestination(
             icon: Icon(Icons.book),
-            label: 'Словник',
+            label: 'Vocabulary',
           ),
           NavigationDestination(
             icon: Icon(Icons.person),
-            label: 'Профіль',
+            label: 'Profile',
           ),
         ],
       ),
@@ -58,7 +55,7 @@ class _GeneralPageState extends State<GeneralPage> {
         ///Home page
         const HomePage(),
         /// Training page
-        const TrainingPage(),
+        Container(),
         /// Chat page
         const PersonOfChatPage(),
         /// Vocabulary page
