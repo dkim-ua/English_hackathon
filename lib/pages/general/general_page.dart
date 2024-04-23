@@ -1,9 +1,11 @@
 import 'package:auto_route/annotations.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:english_hakaton/pages/general/home_page.dart';
 import 'package:english_hakaton/pages/general/chat/person_of_chat_page.dart';
 import 'package:english_hakaton/pages/general/profile/profile_page.dart';
 import 'package:english_hakaton/pages/general/training/training_page.dart';
 import 'package:english_hakaton/pages/general/vocabulary/vocabulary_page.dart';
+import 'package:english_hakaton/route/route.gr.dart';
 import 'package:flutter/material.dart';
 
 @RoutePage()
@@ -69,7 +71,7 @@ class _GeneralPageState extends State<GeneralPage> {
               actions: <Widget>[
                 IconButton(
                   icon: const Icon(Icons.settings),
-                  onPressed: () {},
+                  onPressed: () {context.router.push(const SettingsRoute());},
                 ),
               ],
             ),

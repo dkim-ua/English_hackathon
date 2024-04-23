@@ -11,3 +11,11 @@ var readingTrainingIcon = Image.asset('lib/images/reading_training_icon.png');
 var speakingTrainingIcon = Image.asset('lib/images/speaking_training_icon.png');
 var listeningTrainingIcon = Image.asset('lib/images/listening_training_icon.png');
 var writingTrainingIcon = Image.asset('lib/images/writing_training_icon.png');
+var settingsElementsTextStyle = TextStyle(
+  fontSize: 25,
+  fontWeight: FontWeight.bold,
+);
+var settingsSubElementsTextStyle = TextStyle(
+  fontSize: 18,
+  fontWeight: FontWeight.normal,
+);
