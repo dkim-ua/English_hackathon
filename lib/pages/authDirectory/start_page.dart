@@ -7,7 +7,6 @@ import 'package:english_hakaton/route/route.gr.dart';
 import 'package:english_hakaton/theme/main_theme.dart';
 import 'package:flutter/material.dart';
 
-import 'login_page.dart';
 
 @RoutePage()
 class StartPage extends StatefulWidget {
@@ -26,7 +25,9 @@ class _StartPageState extends State<StartPage> {
 
   void ttsSpeakPage(){
     if (isVoiceAssistant == true) {
-      VoiceAssistantTextToSpeech().speak("Чи є у вас акаунт? Якщо так - скажіть увійти, якщо ні - скажіть реєстрація", "uk-UA");
+      VoiceAssistantTextToSpeech().speak("Чи є у вас акаунт? Скажіть:"
+          "Якщо так - увійти, "
+          "якщо ні - реєстрація", "uk-UA");
     }
   }
   final List<Image> carouselItems = [Image.asset('lib/images/slide1.png'), Image.asset('lib/images/slide2.png'), Image.asset('lib/images/slide3.png')];

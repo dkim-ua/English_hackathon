@@ -2,7 +2,6 @@ import 'package:auto_route/annotations.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:english_hakaton/class/constant.dart';
 import 'package:english_hakaton/class/voise_assistant_tts.dart';
-import 'package:english_hakaton/pages/authDirectory/start_page.dart';
 import 'package:english_hakaton/route/route.gr.dart';
 import 'package:english_hakaton/theme/main_theme.dart';
 import 'package:flutter/material.dart';
@@ -16,12 +15,17 @@ class VoiceAssistantPage extends StatefulWidget {
 }
 
 class _VoiceAssistantPageState extends State<VoiceAssistantPage> {
-  String helloWorld = 'Чи потрібен вам\nголосовий асистент для\nвивчення англійської мови?';
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    ttsSpeakPage();
+  }
+
+  void ttsSpeakPage(){
+    String helloWorld = 'Чи потрібен вам\nголосовий '
+        'асистент для\nвивчення англійської мови?';
     VoiceAssistantTextToSpeech().speak(helloWorld, languages[1]);
   }
 
@@ -56,9 +60,8 @@ class _VoiceAssistantPageState extends State<VoiceAssistantPage> {
             }),
             const SizedBox(height: 16.0),
             ResponseButton(title: 'НІ', onTap: () {
-              VoiceAssistantTextToSpeech().speak(helloWorld, languages[1]);
-              getLansjrkgnr();
-              // voiceAssistantBool = false;
+              isVoiceAssistant = false;
+              context.router.push(const StartRoute());
             }),
           ],
         ),

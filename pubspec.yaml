@@ -85,6 +85,12 @@ flutter:
     - lib/images/vector1.png
     - lib/images/vector2.png
     - lib/images/background_robot.png
+    - lib/images/checked.png
+    - lib/images/unchecked.png
+    - lib/images/listening_training_icon.png
+    - lib/images/reading_training_icon.png
+    - lib/images/speaking_training_icon.png
+    - lib/images/writing_training_icon.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
