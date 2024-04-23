@@ -59,7 +59,7 @@ class _GeneralPageState extends State<GeneralPage> {
         /// Chat page
         const PersonOfChat(),
         /// Vocabulary page
-        const VocabularyPage(),
+        VocabularyPage(),
         ///Profile page
         ListView(
           children: <Widget>[
@@ -68,7 +68,9 @@ class _GeneralPageState extends State<GeneralPage> {
               actions: <Widget>[
                 IconButton(
                   icon: const Icon(Icons.settings),
-                  onPressed: () {},
+                  onPressed: () {
+
+                  },
                 ),
               ],
             ),
