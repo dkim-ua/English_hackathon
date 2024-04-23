@@ -6,14 +6,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 @RoutePage()
-class PersonOfChat extends StatefulWidget {
-  const PersonOfChat({super.key});
+class PersonOfChatPage extends StatefulWidget {
+  const PersonOfChatPage({super.key});
 
   @override
-  State<PersonOfChat> createState() => _PersonOfChatState();
+  State<PersonOfChatPage> createState() => _PersonOfChatPageState();
 }
 
-class _PersonOfChatState extends State<PersonOfChat> {
+class _PersonOfChatPageState extends State<PersonOfChatPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

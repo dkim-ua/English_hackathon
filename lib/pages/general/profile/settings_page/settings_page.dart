@@ -1,7 +1,11 @@
+import 'package:auto_route/annotations.dart';
+import 'package:auto_route/auto_route.dart';
+import 'package:english_hakaton/route/route.gr.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../theme/main_theme.dart';
 
+@RoutePage()
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
 
@@ -27,12 +31,12 @@ class _SettingsPageState extends State<SettingsPage> {
                     IconButton(
                       icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
                       onPressed: () {
-                        // Handle back button press
+                        context.router.replace(GeneralRoute());// Handle back button press
                       },
                     ),
                     const SizedBox(width: 8), // Adjust the width as needed
                     const Text(
-                      'Settings',
+                      'Налаштування',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 18,
@@ -58,7 +62,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 [
                   ListTile(
                     title: Text(
-                      'Account Settings',
+                      'Налаштування Профілю',
                       style: settingsSubElementsTextStyle,
                     ),
                   ),
@@ -72,19 +76,19 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                     trailing: const Icon(Icons.arrow_forward_ios),
                     onTap: () {
-                      // Handle account tap
+                      context.router.replace(AccountSettingsRoute());// Handle account tap
                     },
                   ),
                   ListTile(
                     title: Text(
-                      'General Options',
+                      'Загальні Налаштування',
                       style: settingsSubElementsTextStyle,
                     ),
                   ),
                   ListTile(
                     leading: const Icon(Icons.language),
                     title: Text(
-                      'Language',
+                      'Мова',
                       style: settingsElementsTextStyle,
                     ),
                     trailing: const Icon(Icons.arrow_forward_ios),
@@ -92,7 +96,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   SwitchListTile(
                     secondary: const Icon(Icons.notifications),
                     title: Text(
-                      'Notifications',
+                      'Сповіщення',
                       style: settingsElementsTextStyle,
                     ),
                     value: true, // Set the initial value
@@ -103,7 +107,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   SwitchListTile(
                     secondary: const Icon(Icons.assistant),
                     title: Text(
-                      'Assistant',
+                      'Асистент',
                       style: settingsElementsTextStyle,
                     ),
                     value: true, // Set the initial value
@@ -114,7 +118,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   ListTile(
                     leading: const Icon(Icons.help),
                     title: Text(
-                      'Help',
+                      'Підтримка',
                       style: settingsElementsTextStyle,
                     ),
                     trailing: const Icon(Icons.arrow_forward_ios),
@@ -122,7 +126,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   ListTile(
                     leading: const Icon(Icons.exit_to_app),
                     title: Text(
-                      'Log Out',
+                      'Вийти з профілю',
                       style: settingsElementsTextStyle,
                     ),
                   ),

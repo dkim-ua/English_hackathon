@@ -19,3 +19,7 @@ var settingsSubElementsTextStyle = TextStyle(
   fontSize: 18,
   fontWeight: FontWeight.normal,
 );
+var lessonText = TextStyle(
+  fontSize: 18,
+  fontWeight: FontWeight.normal,
+);

@@ -34,23 +34,23 @@ class _GeneralPageState extends State<GeneralPage> {
         destinations: const <Widget>[
           NavigationDestination(
             icon: Icon(Icons.home),
-            label: 'Home',
+            label: 'Головна',
           ),
           NavigationDestination(
             icon: Icon(Icons.model_training_rounded),
-            label: 'Training',
+            label: 'Тренуватися',
           ),
           NavigationDestination(
             icon: Icon(Icons.mark_chat_unread_outlined),
-            label: 'Chat',
+            label: 'Чат',
           ),
           NavigationDestination(
             icon: Icon(Icons.book),
-            label: 'Vocabulary',
+            label: 'Словник',
           ),
           NavigationDestination(
             icon: Icon(Icons.person),
-            label: 'Profile',
+            label: 'Профіль',
           ),
         ],
       ),
@@ -60,14 +60,14 @@ class _GeneralPageState extends State<GeneralPage> {
         /// Training page
         const TrainingPage(),
         /// Chat page
-        const PersonOfChat(),
+        const PersonOfChatPage(),
         /// Vocabulary page
         const VocabularyPage(),
         ///Profile page
         ListView(
           children: <Widget>[
             AppBar(
-              title: const Text('DAVID NEGR'),
+              title: const Text('Профіль'),
               actions: <Widget>[
                 IconButton(
                   icon: const Icon(Icons.settings),

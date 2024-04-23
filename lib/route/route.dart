@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:english_hakaton/pages/general/profile/settings_page/settings_page.dart';
 import 'package:english_hakaton/route/route.gr.dart';
 
 @AutoRouterConfig()
@@ -14,6 +15,7 @@ class AppRouter extends $AppRouter {
     AutoRoute(page: PersonOfChatRoute.page),
     AutoRoute(page: ChatRoute.page),
     AutoRoute(page: SettingsRoute.page),
+    AutoRoute(page: AccountSettingsRoute.page),
     AutoRoute(page: TrainingRoute.page)
   ];
 }

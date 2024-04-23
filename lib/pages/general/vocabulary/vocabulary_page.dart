@@ -78,18 +78,18 @@ class _VocabularyPageState extends State<VocabularyPage> {
             padding: const EdgeInsets.all(5.0),
             child: Column(
               children: [
-                _buildLessonProgress('Lesson 3 Transport', 3, 5),
-                _buildLessonProgress('Lesson 3 Transport', 0, 5),
-                _buildLessonProgress('Lesson 3 Transport', 4, 5),
-                _buildLessonProgress('Lesson 3 Transport', 1, 5),
-                _buildLessonProgress('Lesson 3 Transport', 5, 5),
-                _buildLessonProgress('Lesson 3 Transport', 3, 5),
-                _buildLessonProgress('Lesson 3 Transport', 0, 5),
-                _buildLessonProgress('Lesson 3 Transport', 2, 5),
-                _buildLessonProgress('Lesson 3 Transport', 5, 5),
-                _buildLessonProgress('Lesson 3 Transport', 1, 5),
-                _buildLessonProgress('Lesson 3 Transport', 4, 5),
-                _buildLessonProgress('Lesson 3 Transport', 5, 5),
+                _buildLessonProgress('Основи граматики', 3, 5),
+                _buildLessonProgress('Говоріння чітко та впевнено', 0, 5),
+                _buildLessonProgress('Розуміння виразів', 4, 5),
+                _buildLessonProgress('Оволодіння формами дієслова', 1, 5),
+                _buildLessonProgress('Вивчення класики англійської літератури', 5, 5),
+                _buildLessonProgress('Покращення навичок усного мовлення', 3, 5),
+                _buildLessonProgress('Створення цікавих есе', 0, 5),
+                _buildLessonProgress('Дослідження англомовних країн', 2, 5),
+                _buildLessonProgress('Використання технологій для навчання', 5, 5),
+                _buildLessonProgress('Аналіз новин та розваг', 1, 5),
+                _buildLessonProgress('Стратегії успіху на англійських екзаменах', 4, 5),
+                _buildLessonProgress('Розширення словникового запасу', 5, 5),
               ],
             ),
           ),
@@ -104,13 +104,20 @@ class _VocabularyPageState extends State<VocabularyPage> {
 
   Widget _buildLessonProgress(String lessonName, int completed, int total) {
     return ListTile(
-      title: Text(lessonName),
+      title: Text(
+        lessonName,
+        style: TextStyle(color: Colors.white), // Set the text color here
+      ),
       subtitle: LinearProgressIndicator(
         value: completed / total,
         backgroundColor: Colors.grey[300],
         valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
       ),
-      trailing: Text('$completed/$total'),
+      trailing: Text(
+        '$completed/$total',
+        style: TextStyle(color: Colors.white), // Set the text color here
+      ),
     );
   }
+
 }
