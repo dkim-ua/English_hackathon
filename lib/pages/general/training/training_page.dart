@@ -1,6 +1,8 @@
+import 'package:auto_route/annotations.dart';
 import 'package:english_hakaton/theme/main_theme.dart';
 import 'package:flutter/material.dart';
 
+@RoutePage()
 class TrainingPage extends StatefulWidget {
   const TrainingPage({super.key});
 

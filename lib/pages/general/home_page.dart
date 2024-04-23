@@ -22,43 +22,70 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('UNIT 1'),
+        centerTitle: true,
+        title: const Column(
+        children: [
+          Text(
+            'UNIT 1',
+              style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
       ),
-      body: _LessonList(),
+        ),
+          Text(
+            'поговоримо про бабаблабала',
+            style: TextStyle(
+              fontSize: 16,
+            ),
+          ),
+        ],
+      ),
+    ),
+        body: _LessonList(),
     );
   }
 }
 
 class _LessonList extends StatelessWidget {
-  final List<String> lessons = [
-    'Shop and Shopping',
-    'Sences',
-    'Sences',
-    'Sences',
-    'Sences',
+  final List<Lesson> lessons = [
+    Lesson(title: 'Lesson 1', subtitle: 'Shop and Shopping', bottomTitle: 'Gerund & Infinitive', isCompleted: true),
+    Lesson(title: 'Lesson 2', subtitle: 'Sences', bottomTitle: 'See...'),
+    Lesson(title: 'Lesson 3', subtitle: 'Sences', bottomTitle: 'See...'),
+    Lesson(title: 'Lesson 4', subtitle: 'Sences', bottomTitle: 'See...'),
+    Lesson(title: 'Lesson 5', subtitle: 'Sences', bottomTitle: 'See...'),
   ];
 
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
-      padding: const EdgeInsets.all(8),
+      padding: const EdgeInsets.all(15),
       itemCount: lessons.length,
       itemBuilder: (BuildContext context, int index) {
-        return LessonTile(lesson: lessons[index], index: index);
+        return LessonTile(lesson: lessons[index]);
       },
       separatorBuilder: (BuildContext context, int index) => const Divider(),
     );
   }
 }
+class Lesson {
+  final String title;
+  final String subtitle;
+  final String bottomTitle;
+  final bool isCompleted;
 
+  Lesson({
+    required this.title,
+    required this.subtitle,
+    required this.bottomTitle,
+    this.isCompleted = false,
+  });
+}
 class LessonTile extends StatelessWidget {
-  final String lesson;
-  final int index;
+  final Lesson lesson;
 
   const LessonTile({
     Key? key,
     required this.lesson,
-    required this.index,
   }) : super(key: key);
 
   @override
@@ -66,14 +93,37 @@ class LessonTile extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: Colors.blue,
+        color: const Color(0xff183473).withOpacity(0.65),
         borderRadius: BorderRadius.circular(10),
       ),
       child: ListTile(
-        leading: Icon(index == 0 ? Icons.check_circle : Icons.radio_button_unchecked),
-        title: Text('Lesson ${index + 1}'),
-        subtitle: Text(lesson),
-        trailing: Icon(Icons.chevron_right),
+        leading: (lesson.isCompleted ? iconChecked : iconUnchecked),
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              lesson.title,
+              style: TextStyle(
+                fontSize: 15.0,
+                color: lessons_color,
+              ),
+            ),
+            Text(
+              lesson.subtitle,
+              style: TextStyle(
+                fontSize: 19.0,
+                color: Colors.white,
+              ),
+            ),
+            Text(
+              lesson.bottomTitle,
+              style: TextStyle(
+                fontSize: 15.0,
+                color: Colors.white,
+              ),
+            ),
+          ],
+        ),
         onTap: () {
           // Navigate to lesson details or perform an action
         },
