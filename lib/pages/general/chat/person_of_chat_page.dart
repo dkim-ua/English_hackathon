@@ -1,9 +1,12 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:english_hakaton/class/voise_assistant_tts.dart';
 import 'package:english_hakaton/enums/enum_chat.dart';
 import 'package:english_hakaton/route/route.gr.dart';
 import 'package:english_hakaton/theme/main_theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+import '../../../class/constant.dart';
 
 @RoutePage()
 class PersonOfChatPage extends StatefulWidget {
@@ -14,6 +17,15 @@ class PersonOfChatPage extends StatefulWidget {
 }
 
 class _PersonOfChatPageState extends State<PersonOfChatPage> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    VoiceAssistantTextToSpeech().stop();
+    ttsSpeakStart();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,5 +63,14 @@ class _PersonOfChatPageState extends State<PersonOfChatPage> {
         },
       ),
     );
+  }
+}
+
+void ttsSpeakStart(){
+  ttsSpeak("Ви знаходитесь на сторінці вибору чата. Оберіть чат", languages[1]);
+}
+void ttsSpeak(String text, String language){
+  if (isVoiceAssistant == true) {
+    VoiceAssistantTextToSpeech().speak(text, language);
   }
 }

@@ -1,6 +1,9 @@
 import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../../class/constant.dart';
+import '../../../../../class/voise_assistant_tts.dart';
+
 @RoutePage()
 class AccountSettingsPage extends StatefulWidget {
   const AccountSettingsPage({super.key});
@@ -10,6 +13,14 @@ class AccountSettingsPage extends StatefulWidget {
 }
 
 class _AccountSettingsPageState extends State<AccountSettingsPage> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    VoiceAssistantTextToSpeech().stop();
+    ttsSpeakStart();
+  }
   final TextEditingController _nameController = TextEditingController(text: 'Баклажан');
   final TextEditingController _emailController = TextEditingController(text: 'mva9727@gmail.com');
   int _age = 19;
@@ -82,5 +93,14 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
         ),
       ),
     );
+  }
+}
+void ttsSpeakStart(){
+  ttsSpeak("Ви знаходитесь на сторінці налаштування профіля. "
+      "Ви хочете дізнатись інформацію щодо свого профілю чи функціонал сторінки", languages[1]);
+}
+void ttsSpeak(String text, String language){
+  if (isVoiceAssistant == true) {
+    VoiceAssistantTextToSpeech().speak(text, language);
   }
 }

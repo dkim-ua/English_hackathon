@@ -16,6 +16,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    VoiceAssistantTextToSpeech().stop();
     ttsSpeakPage();
   }
   @override

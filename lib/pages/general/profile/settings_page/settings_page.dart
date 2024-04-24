@@ -3,6 +3,8 @@ import 'package:auto_route/auto_route.dart';
 import 'package:english_hakaton/route/route.gr.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../class/constant.dart';
+import '../../../../class/voise_assistant_tts.dart';
 import '../../../../theme/main_theme.dart';
 
 @RoutePage()
@@ -14,6 +16,13 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    VoiceAssistantTextToSpeech().stop();
+    ttsSpeakStart();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -76,7 +85,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                     trailing: const Icon(Icons.arrow_forward_ios),
                     onTap: () {
-                      context.router.replace(AccountSettingsRoute());// Handle account tap
+                      context.router.push(AccountSettingsRoute());// Handle account tap
                     },
                   ),
                   ListTile(
@@ -137,5 +146,15 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
       ),
     );
+  }
+}
+
+void ttsSpeakStart(){
+  ttsSpeak("Ви знаходитесь на сторінці налаштувань, "
+      "що Вас цікавить - налаштування профілю чи загальні налаштування?", languages[1]);
+}
+void ttsSpeak(String text, String language){
+  if (isVoiceAssistant == true) {
+    VoiceAssistantTextToSpeech().speak(text, language);
   }
 }

@@ -11,7 +11,7 @@ class VoiceAssistantTextToSpeech{
   String? engine;
   double volume = 1.0;
   double pitch = 0.7;
-  double rate = 0.55;
+  double rate = 0.52;
   bool isCurrentLanguageInstalled = false;
   String? _newVoiceText;
 

@@ -4,6 +4,7 @@ import 'package:english_hakaton/route/route.gr.dart';
 import 'package:english_hakaton/theme/main_theme.dart';
 import 'package:flutter/material.dart';
 
+import '../../class/voise_assistant_tts.dart';
 import '../../main.dart';
 
 @RoutePage()
@@ -15,6 +16,13 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    VoiceAssistantTextToSpeech().stop();
+  }
 
   @override
   Widget build(BuildContext context) {

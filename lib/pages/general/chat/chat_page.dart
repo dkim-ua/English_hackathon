@@ -1,13 +1,23 @@
 import 'dart:convert';
 
 import 'package:auto_route/annotations.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:english_hakaton/class/chat.dart';
+import 'package:english_hakaton/class/voice_assistant_stt.dart';
+import 'package:english_hakaton/route/route.gr.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:http/http.dart' as http;
+import 'package:shake/shake.dart';
 
-const String baseIP = '192.168.137.1:7050';
+import '../../../class/constant.dart';
+import '../../../class/voise_assistant_tts.dart';
+
+const String baseIP = '192.168.81.71:7050';
+String textStt = '';
+VoiceAssistantSpeechToText voiceAssistantSpeechToText = VoiceAssistantSpeechToText();
+VoiceAssistantTextToSpeech voiceAssistantTextToSpeech = VoiceAssistantTextToSpeech();
 
 @RoutePage()
 class ChatPage extends StatefulWidget {
@@ -31,18 +41,27 @@ class _ChatPageState extends State<ChatPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    voiceAssistantTextToSpeech.stop();
+    ShakeDetector detector = ShakeDetector.autoStart(
+      onPhoneShake: () {
+        // Do stuff on phone shake
+        context.router.back();
+      },
+      minimumShakeCount: 1,
+      shakeSlopTimeMS: 500,
+      shakeCountResetTime: 3000,
+      shakeThresholdGravity: 2.7,
+    );
     _initChat();
   }
 
   Future<void> _initChat() async {
     ChatModel? fetchedChat = await firstMessage(widget.chatType);
-    if (fetchedChat != null) {
-      setState(() {
-        chat = fetchedChat;
-        _answer(chat?.textMessege); // Only call this after ensuring chat is not null
-      });
+    setState(() {
+      chat = fetchedChat;
+      _answer(chat?.textMessege); // Only call this after ensuring chat is not null
+    });
     }
-  }
 
   void _question(types.PartialText message) {
     if (_isProcessing) {
@@ -90,6 +109,7 @@ class _ChatPageState extends State<ChatPage> {
 
     setState(() {
       _messages.insert(0, textMessage); // Вставляем ответ от сервера
+      ttsSpeak(textMessage.toString(), languages[0]);
     });
   }
 
@@ -103,6 +123,21 @@ class _ChatPageState extends State<ChatPage> {
             messages: _messages,
             onSendPressed: _question,
             user: _user,
+          ),
+          ElevatedButton(
+            onPressed: () =>
+            {
+              voiceAssistantTextToSpeech.stop(),
+              voiceAssistantSpeechToText.streamingRecognize(languages[0])
+            },
+            child: const Text('Start endless streaming from mic'),
+          ),
+          ElevatedButton(
+            onPressed: () => {
+              voiceAssistantSpeechToText.stopRecording(),
+              print(voiceAssistantSpeechToText.text)
+            },
+            child: const Text('Stop recording')
           ),
           if (_isProcessing)  // Correct usage of collection if
             Positioned(
@@ -164,5 +199,11 @@ Future<String> fetchData(String newMessageText) async {
     }
   } catch (e) {
     return 'Error during the request: $e';
+  }
+}
+
+void ttsSpeak(String text, String language){
+  if (isVoiceAssistant == true) {
+    VoiceAssistantTextToSpeech().speak(text, language);
   }
 }

@@ -20,10 +20,11 @@ class _StartPageState extends State<StartPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    ttsSpeakPage();
+    VoiceAssistantTextToSpeech().stop();
+    ttsSpeakStart();
   }
 
-  void ttsSpeakPage(){
+  void ttsSpeakStart(){
     if (isVoiceAssistant == true) {
       VoiceAssistantTextToSpeech().speak("Чи є у вас акаунт? Скажіть:"
           "Якщо так - увійти, "

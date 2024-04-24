@@ -3,6 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
+import '../../../class/constant.dart';
+import '../../../class/voise_assistant_tts.dart';
+
 class UserHeader extends StatelessWidget {
   const UserHeader({super.key});
 
@@ -41,6 +44,14 @@ class ClassSection extends StatefulWidget {
 }
 
 class ClassSectionState extends State<ClassSection> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    VoiceAssistantTextToSpeech().stop();
+    ttsSpeakStart();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -114,4 +125,14 @@ class SalesData {
   SalesData(this.year, this.sales);
   final String year;
   final double sales;
+}
+
+void ttsSpeakStart(){
+  ttsSpeak("Ви знаходитесь на сторінці Вашого профіля. "
+      "Ви хочете дізнатись інформацію щодо свого профілю чи функціонал сторінки", languages[1]);
+}
+void ttsSpeak(String text, String language){
+  if (isVoiceAssistant == true) {
+    VoiceAssistantTextToSpeech().speak(text, language);
+  }
 }

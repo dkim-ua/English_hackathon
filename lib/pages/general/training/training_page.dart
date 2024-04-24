@@ -2,6 +2,9 @@ import 'package:auto_route/annotations.dart';
 import 'package:english_hakaton/theme/main_theme.dart';
 import 'package:flutter/material.dart';
 
+import '../../../class/constant.dart';
+import '../../../class/voise_assistant_tts.dart';
+
 @RoutePage()
 class TrainingPage extends StatefulWidget {
   const TrainingPage({super.key});
@@ -11,6 +14,15 @@ class TrainingPage extends StatefulWidget {
 }
 
 class _TrainingPageState extends State<TrainingPage> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    VoiceAssistantTextToSpeech().stop();
+    ttsSpeakStart();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -86,5 +98,14 @@ class LessonTile extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+void ttsSpeakStart(){
+  ttsSpeak("Ви знаходитесь на сторінці Тренувань. Хочете обрати тренування?", languages[1]);
+}
+void ttsSpeak(String text, String language){
+  if (isVoiceAssistant == true) {
+    VoiceAssistantTextToSpeech().speak(text, language);
   }
 }

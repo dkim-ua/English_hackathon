@@ -20,6 +20,7 @@ class _VoiceAssistantPageState extends State<VoiceAssistantPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    VoiceAssistantTextToSpeech().stop();
     ttsSpeakPage();
   }
 
@@ -54,14 +55,14 @@ class _VoiceAssistantPageState extends State<VoiceAssistantPage> {
             const SizedBox(height: 48.0),
             ResponseButton(title: 'ТАК', onTap: () {
               isVoiceAssistant = true;
-              context.router.push(const StartRoute());
-              print('ona skazala DA');
               VoiceAssistantTextToSpeech().stop();
+              context.router.replace(const StartRoute());
+              print('ona skazala DA');
             }),
             const SizedBox(height: 16.0),
             ResponseButton(title: 'НІ', onTap: () {
               isVoiceAssistant = false;
-              context.router.push(const StartRoute());
+              context.router.replace(const StartRoute());
             }),
           ],
         ),

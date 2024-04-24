@@ -1,11 +1,13 @@
 import 'dart:convert';
-import 'dart:ffi';
 
 import 'package:english_hakaton/theme/main_theme.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+
+import '../../../class/constant.dart';
+import '../../../class/voise_assistant_tts.dart';
 
 class VocabularyPage extends StatefulWidget {
   const VocabularyPage({super.key});
@@ -35,6 +37,8 @@ class _VocabularyPageState extends State<VocabularyPage> {
         print('Error: $e');
       }
     }();
+    VoiceAssistantTextToSpeech().stop();
+    ttsSpeakStart();
   }
 
   @override
@@ -179,5 +183,14 @@ class _VocabularyPageState extends State<VocabularyPage> {
     } catch (e) {
       throw Exception('Failed to load data $e');
     }
+  }
+}
+
+void ttsSpeakStart(){
+  ttsSpeak("Ви знаходитесь на сторінці Словника. ", languages[1]);
+}
+void ttsSpeak(String text, String language){
+  if (isVoiceAssistant == true) {
+    VoiceAssistantTextToSpeech().speak(text, language);
   }
 }
