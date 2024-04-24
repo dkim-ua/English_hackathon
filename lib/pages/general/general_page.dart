@@ -6,6 +6,7 @@ import 'package:english_hakaton/pages/general/profile/profile_page.dart';
 import 'package:english_hakaton/pages/general/training/training_page.dart';
 import 'package:english_hakaton/pages/general/vocabulary/vocabulary_page.dart';
 import 'package:english_hakaton/route/route.gr.dart';
+import 'package:english_hakaton/theme/main_theme.dart';
 import 'package:flutter/material.dart';
 
 @RoutePage()
@@ -34,23 +35,23 @@ class _GeneralPageState extends State<GeneralPage> {
         destinations: const <Widget>[
           NavigationDestination(
             icon: Icon(Icons.home),
-            label: 'Home',
+            label: 'Головна',
           ),
           NavigationDestination(
             icon: Icon(Icons.model_training_rounded),
-            label: 'Training',
+            label: 'Тренування',
           ),
           NavigationDestination(
             icon: Icon(Icons.mark_chat_unread_outlined),
-            label: 'Chat',
+            label: 'Чат',
           ),
           NavigationDestination(
             icon: Icon(Icons.book),
-            label: 'Vocabulary',
+            label: 'Словник',
           ),
           NavigationDestination(
             icon: Icon(Icons.person),
-            label: 'Profile',
+            label: 'Профіль',
           ),
         ],
       ),
@@ -80,7 +81,7 @@ class _GeneralPageState extends State<GeneralPage> {
             Container(
               decoration: BoxDecoration(
                 borderRadius: const BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
-                color: const Color(0xff173373).withOpacity(0.65),
+                color: mainColor,
               ),
               height: 500.0,
               child: const ClassSection(),
