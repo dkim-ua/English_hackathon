@@ -66,6 +66,7 @@ dev_dependencies:
   flutter_chat_ui: ^1.6.12
   flutter_tts: ^4.0.2
 
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
