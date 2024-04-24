@@ -11,7 +11,7 @@ class UserHeader extends StatelessWidget {
     return const ListTile(
       leading: Icon(Icons.account_circle, size: 50),
       title: Text('Lera Mais', style: TextStyle(fontWeight: FontWeight.bold)),
-      subtitle: Text('Pre-Intermediate'),
+      subtitle: Text('Pre-Intermediate',),
     );
   }
 }
@@ -90,7 +90,7 @@ class ClassSectionState extends State<ClassSection> {
                 borderRadius: BorderRadius.circular(10),
               ),
               child: const Center(
-                child: Text('Pre-Intermediate', textAlign: TextAlign.center),
+                child: Text('Pre-Intermediate',style: TextStyle(color: Colors.white), textAlign: TextAlign.center),
               ),
             ),
             Container(
@@ -100,7 +100,7 @@ class ClassSectionState extends State<ClassSection> {
                 borderRadius: BorderRadius.circular(10),
               ),
               child: const Center(
-                child: Text('Pre-Intermediate', textAlign: TextAlign.center),
+                child: Text('Pre-Intermediate',style: TextStyle(color: Colors.white), textAlign: TextAlign.center),
               ),
             ),
           ],
