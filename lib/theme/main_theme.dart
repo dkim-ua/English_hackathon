@@ -23,3 +23,4 @@ var lessonText = TextStyle(
   fontSize: 18,
   fontWeight: FontWeight.normal,
 );
+var iconWhite = Colors.white;

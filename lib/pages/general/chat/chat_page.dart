@@ -7,7 +7,7 @@ import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:http/http.dart' as http;
 
-const String baseIP = '192.168.137.1:7050';
+const String baseIP = '192.168.81.71:7050';
 
 @RoutePage()
 class ChatPage extends StatefulWidget {

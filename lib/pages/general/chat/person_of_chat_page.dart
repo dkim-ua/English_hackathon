@@ -19,20 +19,24 @@ class _PersonOfChatPageState extends State<PersonOfChatPage> {
     return Scaffold(
       backgroundColor: mainColor,
       appBar: AppBar(
-        title: const Text('Themes for chat'),
+        title: const Text('Теми для чату'),
       ),
-      body: ListView(
-        children: <Widget>[
-            _buildChatThemeTile('Hospital', 'Doctor', ChatType.hospital.serverType()),
-            _buildChatThemeTile('Taxi', 'Taxi driver', ChatType.taxi.serverType()),
-            _buildChatThemeTile('Restaurant', 'Waiter', ChatType.restaurant.serverType()),
-            _buildChatThemeTile('Interview', 'Hiring manager', ChatType.interview.serverType()),
-            _buildChatThemeTile('Hotel', 'Manager', ChatType.hotel.serverType()),
-            _buildChatThemeTile('Date', 'English teacher', ChatType.friend.serverType()),
-        ],
+      body: Padding(
+        padding: EdgeInsets.only(top: 12.0), // Add padding only at the bottom
+        child: ListView(
+          children: <Widget>[
+            _buildChatThemeTile('Лікарня', 'Лікар', ChatType.hospital.serverType()),
+            _buildChatThemeTile('Таксі', 'Водій', ChatType.taxi.serverType()),
+            _buildChatThemeTile('Ресторан', 'Офіціант', ChatType.restaurant.serverType()),
+            _buildChatThemeTile('Співбесіда', 'Рекрутер', ChatType.interview.serverType()),
+            _buildChatThemeTile('Готель', 'Менеджер', ChatType.hotel.serverType()),
+            _buildChatThemeTile('Побачення', 'Подруга', ChatType.friend.serverType()),
+          ],
+        ),
       ),
     );
   }
+
 
   Widget _buildChatThemeTile(String title, String subtitle, String chatType) {
     return Card(

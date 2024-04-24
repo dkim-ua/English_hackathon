@@ -21,10 +21,10 @@ class _TrainingPageState extends State<TrainingPage> {
 
 class _LessonList extends StatelessWidget {
   final List<String> lessons = [
-    'Reading',
-    'Speaking',
-    'Listening',
-    'Writing',
+    'Читання',
+    'Розмова',
+    'Диктант',
+    'Писання',
   ];
 
   @override
