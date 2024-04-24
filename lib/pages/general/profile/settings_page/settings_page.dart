@@ -22,7 +22,7 @@ class _SettingsPageState extends State<SettingsPage> {
         child: CustomScrollView(
           slivers: [
             SliverAppBar(
-              backgroundColor: const Color(0xff173373).withOpacity(0.65),
+              backgroundColor: mainColor,
               leading: Container(), // Remove the default leading icon button
               flexibleSpace: Container(
                 alignment: Alignment.center,

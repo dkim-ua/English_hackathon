@@ -1,4 +1,7 @@
 import 'package:auto_route/annotations.dart';
+import 'package:auto_route/auto_route.dart';
+import 'package:english_hakaton/route/route.gr.dart';
+import 'package:english_hakaton/theme/main_theme.dart';
 import 'package:flutter/material.dart';
 
 @RoutePage()
@@ -18,7 +21,18 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Account'),
+        backgroundColor: mainColor,
+        title: Text('Профіль',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios, color: Colors.white), // Added back_ios icon
+          onPressed: () => context.router.replace(SettingsRoute()),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -37,25 +51,27 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
             TextField(
               controller: _nameController,
               decoration: const InputDecoration(
-                labelText: 'Name',
+                labelText: "Ім'я",
               ),
             ),
             const SizedBox(height: 16),
             Row(
               children: [
-                const Text('Gender: '),
+                const Text('Стать: '),
                 Radio<String>(
                   value: 'male',
                   groupValue: null,
                   onChanged: null,
+                  activeColor: mainColor,
                 ),
-                const Text('Male'),
+                const Text('Чоловіча'),
                 Radio<String>(
                   value: 'female',
                   groupValue: null,
                   onChanged: null,
+                  activeColor: mainColor,
                 ),
-                const Text('Female'),
+                const Text('Жіноча'),
               ],
             ),
             const SizedBox(height: 16),
@@ -63,7 +79,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
               controller: TextEditingController(text: _age.toString()),
               keyboardType: TextInputType.number,
               decoration: const InputDecoration(
-                labelText: 'Age',
+                labelText: 'Вік',
               ),
               onChanged: (value) {
                 setState(() {

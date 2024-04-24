@@ -3,8 +3,10 @@ import 'package:auto_route/auto_route.dart';
 import 'package:english_hakaton/pages/general/home_page.dart';
 import 'package:english_hakaton/pages/general/chat/person_of_chat_page.dart';
 import 'package:english_hakaton/pages/general/profile/profile_page.dart';
+import 'package:english_hakaton/pages/general/training/training_page.dart';
 import 'package:english_hakaton/pages/general/vocabulary/vocabulary_page.dart';
 import 'package:english_hakaton/route/route.gr.dart';
+import 'package:english_hakaton/theme/main_theme.dart';
 import 'package:flutter/material.dart';
 
 @RoutePage()
@@ -57,7 +59,7 @@ class _GeneralPageState extends State<GeneralPage> {
         ///Home page
         const HomePage(),
         /// Training page
-        Container(),
+        TrainingPage(),
         /// Chat page
         const PersonOfChatPage(),
         /// Vocabulary page
@@ -79,7 +81,7 @@ class _GeneralPageState extends State<GeneralPage> {
             Container(
               decoration: BoxDecoration(
                 borderRadius: const BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
-                color: const Color(0xff173373).withOpacity(0.65),
+                color: mainColor,
               ),
               height: 500.0,
               child: const ClassSection(),
