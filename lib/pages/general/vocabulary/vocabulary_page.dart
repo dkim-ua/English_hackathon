@@ -21,6 +21,18 @@ class _VocabularyPageState extends State<VocabularyPage> {
   final int totalWords = 270;
   final int wordsToStudy = 130;
   final int wordsToRepeat = 73;
+  Map<String, bool> buttonPressed = {};
+  String? activeButton;
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize the button states (assuming you know the button labels beforehand)
+    // This step might be dynamic based on actual data in a real application
+    for (int i = 1; i <= 9; i++) {
+      buttonPressed['$i'] = false;
+    }
+  }
 
   Future<Map<String, dynamic>> fetchData(int page, int pageSize) async {
     final response = await http.get(Uri.http(baseIP, '/page-for-user', {
@@ -61,14 +73,11 @@ class _VocabularyPageState extends State<VocabularyPage> {
             children: [
               // User Info and Progress
               _buildUserInfoSection(),
-
-              // Other UI elements like buttons...
-              // ...
-
               // Lessons Progress List
               ...wordsMapResponse.entries.map((entry) {
                 return _buildLessonProgress(entry.key, entry.value);
               }).toList(),
+              _buildPageNavigation(context),
             ],
           );
         },
@@ -140,16 +149,64 @@ class _VocabularyPageState extends State<VocabularyPage> {
 
   Card _buildLessonProgress(String title, dynamic value) {
     return Card(
+      color: mainColor, // Set your desired background color here
       margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       child: ListTile(
-        title: Text(title),
+        title: Text(title,style: TextStyle(color: Colors.white),),
         subtitle: LinearProgressIndicator(
           value: (value ?? 0) / 5, // Use the actual value or a placeholder
           backgroundColor: Colors.grey[300],
           valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
         ),
-        trailing: Text('${value ?? 0}/5'), // Use the actual value or a placeholder
+        trailing: Text('${value ?? 0}/5',style: TextStyle(color: Colors.white),), // Use the actual value or a placeholder
       ),
     );
   }
+  Widget _buildPageNavigation(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 8.0),
+      height: 50, // Fixed height for the container
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal, // Enable horizontal scrolling
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: List.generate(9, (index) { // Dynamically generate buttons
+            String buttonLabel = '${index + 1}';
+            return Row(
+              children: [
+                _navigationButton(context, buttonLabel),
+                SizedBox(width: 10), // Space between buttons
+              ],
+            );
+          }),
+        ),
+      ),
+    );
+  }
+
+  Widget _navigationButton(BuildContext context, String page) {
+    bool isActive = activeButton == page; // Check if this button is the active one
+    return TextButton(
+      onPressed: () {
+        setState(() {
+          if (isActive) {
+            activeButton = null; // Deselect if already active
+          } else {
+            activeButton = page; // Set as active
+          }
+        });
+      },
+      child: Text(
+        page,
+        style: TextStyle(color: isActive ? Colors.black : Colors.white),
+      ),
+      style: TextButton.styleFrom(
+        backgroundColor: isActive ? Colors.white : mainColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(18.0),
+        ),
+      ),
+    );
+  }
+
 }
