@@ -54,6 +54,11 @@ class _VocabularyPageState extends State<VocabularyPage> {
       appBar: AppBar(
         title: Text(userName),
         centerTitle: true,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios,color: Colors.transparent,),
+          onPressed: (){
+          },
+        ),
       ),
       body: FutureBuilder<Map<String, dynamic>>(
         future: fetchData(1, 25),

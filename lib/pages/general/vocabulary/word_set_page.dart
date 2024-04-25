@@ -221,11 +221,17 @@ class LessonButton extends StatelessWidget {
             icon: Icon(Icons.add, color: Colors.white),
             onPressed: () {
               // Add your desired functionality here
-              print('Adding detail for: ${level.name}');
+              print('Adding detail for: ${level.name} ${level.subLevel}');
             },
           ),
           SizedBox(width: 8), // Space between the icon and text
-          Text(level.name, style: TextStyle(color: Colors.white)),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(level.name, style: TextStyle(color: Colors.white)),
+              Text(level.subLevel, style: TextStyle(color: Colors.white, fontSize: 16)),
+            ],
+          ),
         ],
       ),
       backgroundColor: mainColor,

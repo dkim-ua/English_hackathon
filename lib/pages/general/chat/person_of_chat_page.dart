@@ -20,6 +20,12 @@ class _PersonOfChatPageState extends State<PersonOfChatPage> {
       backgroundColor: mainColor,
       appBar: AppBar(
         title: const Text('Themes for chat'),
+        centerTitle: true,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios,color: Colors.transparent,),
+          onPressed: (){
+          },
+        ),
       ),
       body: ListView(
         children: <Widget>[
