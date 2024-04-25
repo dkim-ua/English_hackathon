@@ -194,9 +194,14 @@ class LessonButton extends StatelessWidget {
         child: ExpansionTile(
           initiallyExpanded: isExpanded,
           onExpansionChanged: onExpansionChanged,
-          title: Text(
-            lesson.lessonName,
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+          title: Row(
+            children: [ // Additional icon
+              SizedBox(width: 10), // Space between icons
+              Expanded(child: Text(
+                lesson.lessonName,
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+              )),
+            ],
           ),
           iconColor: Colors.white,
           collapsedIconColor: Colors.white,
@@ -210,7 +215,19 @@ class LessonButton extends StatelessWidget {
 
   Widget _buildNestedExpansionTile(Level level) {
     return ExpansionTile(
-      title: Text(level.name, style: TextStyle(color: Colors.white)),
+      title: Row(
+        children: [
+          IconButton(
+            icon: Icon(Icons.add, color: Colors.white),
+            onPressed: () {
+              // Add your desired functionality here
+              print('Adding detail for: ${level.name}');
+            },
+          ),
+          SizedBox(width: 8), // Space between the icon and text
+          Text(level.name, style: TextStyle(color: Colors.white)),
+        ],
+      ),
       backgroundColor: mainColor,
       iconColor: Colors.white,
       collapsedIconColor: Colors.white,
@@ -219,7 +236,9 @@ class LessonButton extends StatelessWidget {
       )).toList(),
     );
   }
+
 }
+
 
 
 
