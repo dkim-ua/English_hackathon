@@ -14,10 +14,9 @@ import 'package:shake/shake.dart';
 import '../../../class/constant.dart';
 import '../../../class/voise_assistant_tts.dart';
 
-const String baseIP = '192.168.81.71:7050';
+const String baseIP = '192.168.137.1:7050';
 String textStt = '';
-VoiceAssistantSpeechToText voiceAssistantSpeechToText = VoiceAssistantSpeechToText();
-VoiceAssistantTextToSpeech voiceAssistantTextToSpeech = VoiceAssistantTextToSpeech();
+late VoiceAssistantSpeechToText voiceAssistantSpeechToText;
 
 @RoutePage()
 class ChatPage extends StatefulWidget {
@@ -52,6 +51,7 @@ class _ChatPageState extends State<ChatPage> {
       shakeCountResetTime: 3000,
       shakeThresholdGravity: 2.7,
     );
+    voiceAssistantSpeechToText = VoiceAssistantSpeechToText(languages[0]);
     _initChat();
   }
 
@@ -125,19 +125,10 @@ class _ChatPageState extends State<ChatPage> {
             user: _user,
           ),
           ElevatedButton(
-            onPressed: () =>
-            {
-              voiceAssistantTextToSpeech.stop(),
-              voiceAssistantSpeechToText.streamingRecognize(languages[0])
-            },
-            child: const Text('Start endless streaming from mic'),
-          ),
-          ElevatedButton(
-            onPressed: () => {
-              voiceAssistantSpeechToText.stopRecording(),
-              print(voiceAssistantSpeechToText.text)
-            },
-            child: const Text('Stop recording')
+            onPressed: processVoice,
+            child: voiceAssistantSpeechToText.recognizing
+                ? const Text('Stop recording')
+                : const Text('Start Streaming from mic'),
           ),
           if (_isProcessing)  // Correct usage of collection if
             Positioned(
@@ -151,8 +142,13 @@ class _ChatPageState extends State<ChatPage> {
       ),
     );
   }
+  void processVoice(){
+    voiceAssistantSpeechToText.recognizing
+        ? voiceAssistantSpeechToText.stopRecording
+        : voiceAssistantSpeechToText.streamingRecognize;
+    _question(voiceAssistantSpeechToText.text as types.PartialText);
+  }
 }
-
 
 Future<ChatModel> firstMessage(String theme) async {
   var url = Uri.parse('http://$baseIP/api/v1/chat-assistant/new-chat');
@@ -204,6 +200,6 @@ Future<String> fetchData(String newMessageText) async {
 
 void ttsSpeak(String text, String language){
   if (isVoiceAssistant == true) {
-    VoiceAssistantTextToSpeech().speak(text, language);
+    voiceAssistantTextToSpeech.speak(text, language);
   }
 }

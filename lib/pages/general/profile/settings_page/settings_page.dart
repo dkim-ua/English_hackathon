@@ -4,8 +4,11 @@ import 'package:english_hakaton/route/route.gr.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../class/constant.dart';
+import '../../../../class/voice_assistant_stt.dart';
 import '../../../../class/voise_assistant_tts.dart';
 import '../../../../theme/main_theme.dart';
+
+late VoiceAssistantSpeechToText voiceAssistantSpeechToText;
 
 @RoutePage()
 class SettingsPage extends StatefulWidget {
@@ -20,7 +23,7 @@ class _SettingsPageState extends State<SettingsPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    VoiceAssistantTextToSpeech().stop();
+    voiceAssistantSpeechToText = VoiceAssistantSpeechToText(languages[0]);
     ttsSpeakStart();
   }
   @override
@@ -85,6 +88,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                     trailing: const Icon(Icons.arrow_forward_ios),
                     onTap: () {
+                      voiceAssistantTextToSpeech.stop();
                       context.router.push(AccountSettingsRoute());// Handle account tap
                     },
                   ),
@@ -155,6 +159,6 @@ void ttsSpeakStart(){
 }
 void ttsSpeak(String text, String language){
   if (isVoiceAssistant == true) {
-    VoiceAssistantTextToSpeech().speak(text, language);
+    voiceAssistantTextToSpeech.speak(text, language);
   }
 }

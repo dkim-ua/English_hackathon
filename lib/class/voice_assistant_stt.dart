@@ -1,48 +1,38 @@
 import 'dart:async';
+import 'package:english_hakaton/class/voise_assistant_tts.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:google_speech/endless_streaming_service.dart';
 import 'package:google_speech/google_speech.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:sound_stream/sound_stream.dart';
+
+import 'constant.dart';
 
 const int kAudioSampleRate = 16000;
 const int kAudioNumChannels = 1;
 
 class VoiceAssistantSpeechToText {
-  final FlutterSoundRecorder _recorder = FlutterSoundRecorder();
+  VoiceAssistantSpeechToText(this.language);
 
+  late String language;
+  final RecorderStream _recorder = RecorderStream();
+  late VoiceAssistantTextToSpeech voiceAssistantTextToSpeech;
   bool recognizing = false;
   bool recognizeFinished = false;
   String text = '';
   StreamSubscription<List<int>>? _audioStreamSubscription;
   BehaviorSubject<List<int>>? _audioStream;
-  StreamController<Food>? _recordingDataController;
-  StreamSubscription? _recordingDataSubscription;
 
-  void streamingRecognize(String language) async {
-    await _recorder.openRecorder();
-    // Stream to be consumed by speech recognizer
+  void streamingRecognize() async {
     _audioStream = BehaviorSubject<List<int>>();
+    _audioStreamSubscription = _recorder.audioStream.listen((event) {
+      _audioStream!.add(event);
+    });
 
-    // Create recording stream
-    _recordingDataController = StreamController<Food>();
-    _recordingDataSubscription =
-        _recordingDataController?.stream.listen((buffer) {
-          if (buffer is FoodData) {
-            _audioStream!.add(buffer.data!);
-          }
-        });
+    await _recorder.start();
 
-    recognizing = true;
-
-    await Permission.microphone.request();
-
-    await _recorder.startRecorder(
-        toStream: _recordingDataController!.sink,
-        codec: Codec.pcm16,
-        numChannels: kAudioNumChannels,
-        sampleRate: kAudioSampleRate);
-
+      recognizing = true;
     final serviceAccount = ServiceAccount.fromString(r'''{
   "type": "service_account",
   "project_id": "future-simple-progect",
@@ -56,17 +46,12 @@ class VoiceAssistantSpeechToText {
   "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/lang-ai%40future-simple-progect.iam.gserviceaccount.com",
   "universe_domain": "googleapis.com"
 }''');
-    final speechToText =
-    EndlessStreamingService.viaServiceAccount(serviceAccount);
+    final speechToText = SpeechToText.viaServiceAccount(serviceAccount);
     final config = _getConfig(language);
 
-    final responseStream = speechToText.endlessStream;
-
-    speechToText.endlessStreamingRecognize(
+    final responseStream = speechToText.streamingRecognize(
         StreamingRecognitionConfig(config: config, interimResults: true),
-        _audioStream!,
-        restartTime: const Duration(seconds: 60),
-        transitionBufferTime: const Duration(seconds: 2));
+        _audioStream!);
 
     var responseText = '';
 
@@ -75,24 +60,25 @@ class VoiceAssistantSpeechToText {
       data.results.map((e) => e.alternatives.first.transcript).join('\n');
 
       if (data.results.first.isFinal) {
-        responseText += '\n$currentText';
-        text = responseText;
-        recognizeFinished = true;
+        responseText += '\n' + currentText;
+          text = responseText;
+          recognizeFinished = true;
       } else {
-        text = '$responseText\n$currentText';
-        recognizeFinished = true;
+          text = responseText + '\n' + currentText;
+          recognizeFinished = true;
       }
-    },  onDone: () {
-      recognizing = false;
+    }, onDone: () {
+        recognizing = false;
     });
   }
 
+
   void stopRecording() async {
-    await _recorder.stopRecorder();
+    await _recorder.stop();
     await _audioStreamSubscription?.cancel();
     await _audioStream?.close();
-    await _recordingDataSubscription?.cancel();
-    recognizing = false;
+      recognizing = false;
+      voiceAssistantTextToSpeech.speak(text, languages[0]);
   }
 
   RecognitionConfig _getConfig(String language) =>

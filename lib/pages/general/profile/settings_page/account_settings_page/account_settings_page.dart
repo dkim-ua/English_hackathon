@@ -2,7 +2,10 @@ import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../class/constant.dart';
+import '../../../../../class/voice_assistant_stt.dart';
 import '../../../../../class/voise_assistant_tts.dart';
+
+late VoiceAssistantSpeechToText voiceAssistantSpeechToText;
 
 @RoutePage()
 class AccountSettingsPage extends StatefulWidget {
@@ -18,7 +21,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    VoiceAssistantTextToSpeech().stop();
+    voiceAssistantSpeechToText = VoiceAssistantSpeechToText(languages[0]);
     ttsSpeakStart();
   }
   final TextEditingController _nameController = TextEditingController(text: 'Баклажан');
@@ -52,7 +55,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
               ),
             ),
             const SizedBox(height: 16),
-            Row(
+            const Row(
               children: [
                 const Text('Gender: '),
                 Radio<String>(
@@ -101,6 +104,6 @@ void ttsSpeakStart(){
 }
 void ttsSpeak(String text, String language){
   if (isVoiceAssistant == true) {
-    VoiceAssistantTextToSpeech().speak(text, language);
+    voiceAssistantTextToSpeech.speak(text, language);
   }
 }

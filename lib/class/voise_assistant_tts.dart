@@ -1,13 +1,12 @@
 import 'dart:io';
 
-import 'package:english_hakaton/class/constant.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 
 enum TtsState { playing, stopped, paused, continued }
 
 class VoiceAssistantTextToSpeech{
-  FlutterTts flutterTts = FlutterTts();
+  late FlutterTts flutterTts;
   String? engine;
   double volume = 1.0;
   double pitch = 0.7;
@@ -36,33 +35,33 @@ class VoiceAssistantTextToSpeech{
     }
 
     flutterTts.setStartHandler(() {
-        print("Playing");
-        ttsState = TtsState.playing;
+      print("Playing");
+      ttsState = TtsState.playing;
     });
 
     flutterTts.setCompletionHandler(() {
-        print("Complete");
-        ttsState = TtsState.stopped;
+      print("Complete");
+      ttsState = TtsState.stopped;
     });
 
     flutterTts.setCancelHandler(() {
-        print("Cancel");
-        ttsState = TtsState.stopped;
+      print("Cancel");
+      ttsState = TtsState.stopped;
     });
 
     flutterTts.setPauseHandler(() {
-        print("Paused");
-        ttsState = TtsState.paused;
+      print("Paused");
+      ttsState = TtsState.paused;
     });
 
     flutterTts.setContinueHandler(() {
-        print("Continued");
-        ttsState = TtsState.continued;
+      print("Continued");
+      ttsState = TtsState.continued;
     });
 
     flutterTts.setErrorHandler((msg) {
-        print("error: $msg");
-        ttsState = TtsState.stopped;
+      print("error: $msg");
+      ttsState = TtsState.stopped;
     });
 
   }
@@ -85,27 +84,27 @@ class VoiceAssistantTextToSpeech{
     }
   }
 
-  void speak(String newVoiceText, String language) {
-    //flutterTts.setLanguage(language);
-    if(language == 'uk-UA') {
-      flutterTts.setVoice({"name": "Lesya", "locale": 'uk-UA'});
-    } else {
-      flutterTts.setVoice({"name": "Karen", "locale": 'en-AU'});
-    }
+  Future<void> speak(String newVoiceText, String language) async{
+    await flutterTts.setLanguage(language);
+    // if(language == 'uk-UA') {
+    //   flutterTts.setVoice({"name": "Lesya", "locale": 'uk-UA'});
+    // } else {
+    //   flutterTts.setVoice({"name": "Karen", "locale": 'en-US'});
+    // }
     if (isAndroid) {
-      flutterTts
+      await flutterTts
           .isLanguageInstalled(language)
           .then((value) => isCurrentLanguageInstalled = (value as bool));
     }
 
-     flutterTts.setVolume(volume);
-     flutterTts.setSpeechRate(rate);
-     flutterTts.setPitch(pitch);
+    await flutterTts.setVolume(volume);
+    await flutterTts.setSpeechRate(rate);
+    await flutterTts.setPitch(pitch);
 
     if (newVoiceText.isNotEmpty) {
-       flutterTts.speak(newVoiceText);
+      await flutterTts.speak(newVoiceText);
     }
-    }
+  }
 
   Future<void> _setAwaitOptions() async {
     await flutterTts.awaitSpeakCompletion(true);
@@ -121,8 +120,4 @@ class VoiceAssistantTextToSpeech{
     if (result == 1) () => ttsState = TtsState.paused;
   }
 
-  @override
-  void dispose() {
-    flutterTts.stop();
-  }
 }

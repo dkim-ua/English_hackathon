@@ -1,10 +1,13 @@
 import 'package:auto_route/annotations.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:english_hakaton/class/constant.dart';
+import 'package:english_hakaton/class/voice_assistant_stt.dart';
 import 'package:english_hakaton/class/voise_assistant_tts.dart';
 import 'package:english_hakaton/route/route.gr.dart';
 import 'package:english_hakaton/theme/main_theme.dart';
 import 'package:flutter/material.dart';
+
+late VoiceAssistantSpeechToText voiceAssistantSpeechToText;
 
 @RoutePage()
 class VoiceAssistantPage extends StatefulWidget {
@@ -20,14 +23,14 @@ class _VoiceAssistantPageState extends State<VoiceAssistantPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    VoiceAssistantTextToSpeech().stop();
+    voiceAssistantSpeechToText = VoiceAssistantSpeechToText(languages[1]);
+    voiceAssistantTextToSpeech.initTts();
     ttsSpeakPage();
   }
-
   void ttsSpeakPage(){
     String helloWorld = 'Чи потрібен вам\nголосовий '
         'асистент для\nвивчення англійської мови?';
-    VoiceAssistantTextToSpeech().speak(helloWorld, languages[1]);
+    voiceAssistantTextToSpeech.speak(helloWorld, languages[1]);
   }
 
   @override
@@ -55,7 +58,7 @@ class _VoiceAssistantPageState extends State<VoiceAssistantPage> {
             const SizedBox(height: 48.0),
             ResponseButton(title: 'ТАК', onTap: () {
               isVoiceAssistant = true;
-              VoiceAssistantTextToSpeech().stop();
+              voiceAssistantTextToSpeech.stop();
               context.router.replace(const StartRoute());
               print('ona skazala DA');
             }),
@@ -73,7 +76,7 @@ class _VoiceAssistantPageState extends State<VoiceAssistantPage> {
 
 void getLansjrkgnr() async{
   try {
-    var voices = await VoiceAssistantTextToSpeech().flutterTts.getVoices;
+    var voices = await voiceAssistantTextToSpeech.flutterTts.getVoices;
     if (voices != null) {
       var castVoices = voices.map<Map<String, dynamic>>((voice) {
         return Map<String, dynamic>.from(voice as Map);

@@ -7,7 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import '../../../class/constant.dart';
+import '../../../class/voice_assistant_stt.dart';
 import '../../../class/voise_assistant_tts.dart';
+
+late VoiceAssistantSpeechToText voiceAssistantSpeechToText;
 
 class VocabularyPage extends StatefulWidget {
   const VocabularyPage({super.key});
@@ -37,7 +40,7 @@ class _VocabularyPageState extends State<VocabularyPage> {
         print('Error: $e');
       }
     }();
-    VoiceAssistantTextToSpeech().stop();
+    voiceAssistantSpeechToText = VoiceAssistantSpeechToText(languages[1]);
     ttsSpeakStart();
   }
 
@@ -191,6 +194,6 @@ void ttsSpeakStart(){
 }
 void ttsSpeak(String text, String language){
   if (isVoiceAssistant == true) {
-    VoiceAssistantTextToSpeech().speak(text, language);
+    voiceAssistantTextToSpeech.speak(text, language);
   }
 }

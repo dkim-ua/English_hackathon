@@ -7,6 +7,9 @@ import 'package:english_hakaton/route/route.gr.dart';
 import 'package:english_hakaton/theme/main_theme.dart';
 import 'package:flutter/material.dart';
 
+import '../../class/voice_assistant_stt.dart';
+
+late VoiceAssistantSpeechToText voiceAssistantSpeechToText;
 
 @RoutePage()
 class StartPage extends StatefulWidget {
@@ -20,13 +23,13 @@ class _StartPageState extends State<StartPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    VoiceAssistantTextToSpeech().stop();
+    voiceAssistantSpeechToText = VoiceAssistantSpeechToText(languages[1]);
     ttsSpeakStart();
   }
 
   void ttsSpeakStart(){
     if (isVoiceAssistant == true) {
-      VoiceAssistantTextToSpeech().speak("Чи є у вас акаунт? Скажіть:"
+      voiceAssistantTextToSpeech.speak("Чи є у вас акаунт? Скажіть:"
           "Якщо так - увійти, "
           "якщо ні - реєстрація", "uk-UA");
     }
@@ -63,7 +66,7 @@ class _StartPageState extends State<StartPage> {
                     borderRadius: BorderRadius.circular(18.0)),),),
               child: Text('ПОЧАТИ', style: TextStyle(fontSize: 24, color: backgroundColor,)),
               onPressed: () {
-                VoiceAssistantTextToSpeech().stop();
+                voiceAssistantTextToSpeech.stop();
                 context.router.push(const RegisterRoute());
               },
             ),
@@ -79,8 +82,8 @@ class _StartPageState extends State<StartPage> {
               child: Text('ВЖЕ МАЮ АККАУНТ', style: TextStyle(fontSize: 24, color: mainColor),),
               onPressed: () {
                 // Handle I already have an account
-                VoiceAssistantTextToSpeech().stop();
-                context.router.push(const LoginRoute());
+                voiceAssistantTextToSpeech.stop();
+                context.router.push(const GeneralRoute());
               },
             ),
           ],

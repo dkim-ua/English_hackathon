@@ -48,6 +48,7 @@ dependencies:
   shake: ^2.2.0
   google_speech: ^5.2.0+1
   flutter_sound: ^9.4.6
+  sound_stream: ^0.4.1
 
 dev_dependencies:
   flutter_test:

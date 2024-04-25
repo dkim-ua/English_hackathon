@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../../class/constant.dart';
+import '../../../class/voice_assistant_stt.dart';
 import '../../../class/voise_assistant_tts.dart';
+
+late VoiceAssistantSpeechToText voiceAssistantSpeechToText;
 
 class UserHeader extends StatelessWidget {
   const UserHeader({super.key});
@@ -49,7 +52,7 @@ class ClassSectionState extends State<ClassSection> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    VoiceAssistantTextToSpeech().stop();
+    voiceAssistantSpeechToText = VoiceAssistantSpeechToText(languages[1]);
     ttsSpeakStart();
   }
 
@@ -133,6 +136,6 @@ void ttsSpeakStart(){
 }
 void ttsSpeak(String text, String language){
   if (isVoiceAssistant == true) {
-    VoiceAssistantTextToSpeech().speak(text, language);
+    voiceAssistantTextToSpeech.speak(text, language);
   }
 }

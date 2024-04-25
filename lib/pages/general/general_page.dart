@@ -1,5 +1,6 @@
 import 'package:auto_route/annotations.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:english_hakaton/class/constant.dart';
 import 'package:english_hakaton/pages/general/home_page.dart';
 import 'package:english_hakaton/pages/general/chat/person_of_chat_page.dart';
 import 'package:english_hakaton/pages/general/profile/profile_page.dart';
@@ -71,7 +72,7 @@ class _GeneralPageState extends State<GeneralPage> {
               actions: <Widget>[
                 IconButton(
                   icon: const Icon(Icons.settings),
-                  onPressed: () {context.router.replace(SettingsRoute());},
+                  onPressed: () {voiceAssistantTextToSpeech.stop(); context.router.replace(SettingsRoute());},
                 ),
               ],
             ),

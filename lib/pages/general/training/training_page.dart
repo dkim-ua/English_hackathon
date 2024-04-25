@@ -3,7 +3,10 @@ import 'package:english_hakaton/theme/main_theme.dart';
 import 'package:flutter/material.dart';
 
 import '../../../class/constant.dart';
+import '../../../class/voice_assistant_stt.dart';
 import '../../../class/voise_assistant_tts.dart';
+
+late VoiceAssistantSpeechToText voiceAssistantSpeechToText;
 
 @RoutePage()
 class TrainingPage extends StatefulWidget {
@@ -19,7 +22,7 @@ class _TrainingPageState extends State<TrainingPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    VoiceAssistantTextToSpeech().stop();
+    voiceAssistantSpeechToText = VoiceAssistantSpeechToText(languages[1]);
     ttsSpeakStart();
   }
 
@@ -106,6 +109,6 @@ void ttsSpeakStart(){
 }
 void ttsSpeak(String text, String language){
   if (isVoiceAssistant == true) {
-    VoiceAssistantTextToSpeech().speak(text, language);
+    voiceAssistantTextToSpeech.speak(text, language);
   }
 }

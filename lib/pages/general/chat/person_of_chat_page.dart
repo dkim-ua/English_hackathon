@@ -7,6 +7,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../../class/constant.dart';
+import '../../../class/voice_assistant_stt.dart';
+
+late VoiceAssistantSpeechToText voiceAssistantSpeechToText;
+
 
 @RoutePage()
 class PersonOfChatPage extends StatefulWidget {
@@ -22,7 +26,7 @@ class _PersonOfChatPageState extends State<PersonOfChatPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    VoiceAssistantTextToSpeech().stop();
+    voiceAssistantSpeechToText = VoiceAssistantSpeechToText(languages[0]);
     ttsSpeakStart();
   }
 
@@ -71,6 +75,6 @@ void ttsSpeakStart(){
 }
 void ttsSpeak(String text, String language){
   if (isVoiceAssistant == true) {
-    VoiceAssistantTextToSpeech().speak(text, language);
+    voiceAssistantTextToSpeech.speak(text, language);
   }
 }
