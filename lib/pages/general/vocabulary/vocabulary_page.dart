@@ -13,7 +13,7 @@ class VocabularyPage extends StatefulWidget {
 }
 
 class _VocabularyPageState extends State<VocabularyPage> {
-  static const String baseIP = '192.168.137.1:7050';
+  static const String baseIP = '91.199.45.37:7050';
 
   final String userName = 'DAVID NEGR';
   final String userCourse = 'Lera Mais';

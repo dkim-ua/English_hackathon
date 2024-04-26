@@ -1,83 +1,146 @@
+import 'dart:convert';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:english_hakaton/route/route.gr.dart';
 import 'package:english_hakaton/theme/main_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
+import 'package:http/http.dart' as http;
+
 @RoutePage()
 class WordSetPage extends StatefulWidget {
   const WordSetPage({Key? key}) : super(key: key); // Const constructor
 
   @override
-  _WordSetPageState createState() => _WordSetPageState();
+  WordSetPageState createState() => WordSetPageState();
 }
 
-
-class _WordSetPageState extends State<WordSetPage> {
+class WordSetPageState extends State<WordSetPage> {
   String userName = 'Words from lessons';
+  static const String baseIP = '91.199.45.37:7050';
+  static List<dynamic> wordSetLevelsForBeginner = List.empty();
+  static List<dynamic> wordSetLevelsForIntermediate = List.empty();
+  static List<dynamic> wordSetLevelsForAdvance = List.empty();
+  static List<dynamic> wordSet = List.empty();
 
+  late Future<void> _loadData;
 
-  List<LessonProgress> lessonProgressList = [
-    LessonProgress(
-      lessonName: 'Beginner',
-      lessonNumber: 1,
-      progress: 200,
-      wordsProgress: 10,
-      levels: [
-        Level(name: "Animal",subLevel: 'A1', details: ["Lion", "Tiger","Eagle", "Parrot"]),
-        Level(name: "Animal", subLevel: 'A2',details: ["Lion", "Tiger","Eagle", "Parrot"]),
-        Level(name: "Sport", subLevel: 'A1',details: ["Pool", "Ball"]),
-        Level(name: "Sport", subLevel: 'A2',details: ["Pool", "Ball"]),
-        Level(name: "School", subLevel: 'A1',details: ["Notebook", "Pen","Teacher"]),
-        Level(name: "School", subLevel: 'A2',details: ["Notebook", "Pen","Teacher"]),
-      ],
-    ),
-    LessonProgress(
-      lessonName: 'Intermediate',
-      lessonNumber: 1,
-      progress: 200,
-      wordsProgress: 10,
-      levels: [
-        Level(name: "Animal",subLevel: 'B1', details: ["Lion", "Tiger","Eagle", "Parrot"]),
-        Level(name: "Animal", subLevel: 'B2',details: ["Lion", "Tiger","Eagle", "Parrot"]),
-        Level(name: "Sport", subLevel: 'B1',details: ["Pool", "Ball"]),
-        Level(name: "Sport", subLevel: 'B2',details: ["Pool", "Ball"]),
-        Level(name: "School", subLevel: 'B1',details: ["Notebook", "Pen","Teacher"]),
-        Level(name: "School", subLevel: 'B2',details: ["Notebook", "Pen","Teacher"]),
-      ],
-    ),
-    LessonProgress(
-      lessonName: 'Advance',
-      lessonNumber: 1,
-      progress: 200,
-      wordsProgress: 10,
-      levels: [
-        Level(name: "Animal",subLevel: 'C1', details: ["Lion", "Tiger","Eagle", "Parrot"]),
-        Level(name: "Animal", subLevel: 'C2',details: ["Lion", "Tiger","Eagle", "Parrot"]),
-        Level(name: "Sport", subLevel: 'C1',details: ["Pool", "Ball"]),
-        Level(name: "Sport", subLevel: 'C2',details: ["Pool", "Ball"]),
-        Level(name: "School", subLevel: 'C1',details: ["Notebook", "Pen","Teacher"]),
-        Level(name: "School", subLevel: 'C2',details: ["Notebook", "Pen","Teacher"]),
-      ],
-    )
+// Define the isLoading flag
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    isLoading = true;
+    fetchData();
+  }
+
+  Future<void> fetchData() async {
+    try {
+      fetchWordSetsByLevel("BEGINNER");
+      fetchWordSetsByLevel("INTERMEDIATE");
+      fetchWordSetsByLevel("ADVANCED");
+      isLoading = false;
+      print(wordSetLevelsForBeginner);
+      print(wordSetLevelsForIntermediate);
+      print(wordSetLevelsForAdvance);
+
+      // createLessonProgressList();
+    } catch (e) {
+      print("Error fetching data: $e");
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  static List<LessonProgress> lessonProgressList = [
+    createLessonProgress("BEGINNER", wordSetLevelsForBeginner),
+    createLessonProgress("INTERMEDIATE", wordSetLevelsForIntermediate),
+    createLessonProgress("ADVANCED", wordSetLevelsForAdvance)
   ];
 
+  void createLessonProgressList() {
+    setState(() {
+      lessonProgressList = [
+        createLessonProgress("BEGINNER", wordSetLevelsForBeginner),
+        createLessonProgress(
+            "INTERMEDIATE", wordSetLevelsForIntermediate),
+        createLessonProgress("ADVANCED", wordSetLevelsForAdvance)
+      ];
+    });
+  }
 
+  static Future<void> fetchWordSetsByLevel(String level) async {
+    final response = await http
+        .get(Uri.http(baseIP, '/api/v1/word-set/get-word-sets-by-level', {
+      'english-level': level,
+    }));
+
+    try {
+      if (response.statusCode == 200) {
+        wordSetLevelsForBeginner = jsonDecode(response.body);
+        lessonProgressList.add(createLessonProgress(level, wordSetLevelsForBeginner));
+      } else {
+        throw Exception('Failed to load data');
+      }
+    } catch (e) {
+      throw Exception('Failed to load data $e');
+    }
+  }
+
+  static Future<List<dynamic>> fetchWordSetByName(String name) async {
+    final response =
+    await http.get(Uri.http(baseIP, '/api/v1/word-set/by-name', {
+      'name': name,
+    }));
+
+    try {
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed to load data');
+      }
+    } catch (e) {
+      throw Exception('Failed to load data $e');
+    }
+  }
+
+  static Future<int> addWordsFromWordSet(int userId, String name) async {
+    final response = await http
+        .post(Uri.http(baseIP, '/api/v1/user/add-words-from-word-set', {
+      'user-id': userId.toString(),
+      'name': name,
+    }));
+
+    try {
+      return response.statusCode;
+    } catch (e) {
+      throw Exception('Failed to load data $e');
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(userName),
+        title: Text('Words from lessons'),
         centerTitle: true,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios,),
-          onPressed: (){
+          icon: Icon(Icons.arrow_back_ios),
+          onPressed: () {
             context.router.replace(GeneralRoute());
           },
         ),
       ),
-      body: SingleChildScrollView(
+      body: isLoading
+          ? Center(
+        // Show a loading indicator if isLoading is true
+        child: CircularProgressIndicator(),
+      )
+          : SingleChildScrollView(
         child: Column(
           children: [
+            // Your content goes here
             LessonSection(lessonProgressList: lessonProgressList),
           ],
         ),
@@ -86,8 +149,38 @@ class _WordSetPageState extends State<WordSetPage> {
   }
 }
 
-class UserInfoSection extends StatelessWidget {
+LessonProgress createLessonProgress(
+    String lvl, List<dynamic> wordSetLvl) {
+  List<Level> levels = List.empty();
 
+  for (var item in wordSetLvl) {
+    var parts = item.split(', ');
+    if (parts.length == 2) {
+      final uri = Uri.http(WordSetPageState.baseIP, '/api/v1/word-set/by-name', {
+        'name': item,
+      });
+
+      http.get(uri).then((response) {
+        if (response.statusCode == 200) {
+          levels.add(Level(
+              name: parts[0],
+              subLevel: parts[1],
+              details: jsonDecode(response.body)));
+        } else {
+          // Handle the error case
+          print('Request failed with status: ${response.statusCode}');
+        }
+      }).catchError((error) {
+        // Handle the error case
+        print('Error: $error');
+      });
+    }
+  }
+
+  return LessonProgress(lessonName: lvl, levels: levels,);
+}
+
+class UserInfoSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -140,38 +233,44 @@ class _LessonSectionState extends State<LessonSection> {
               );
             },
           ),
-          SizedBox(height: 20.0,)
+          SizedBox(
+            height: 20.0,
+          )
         ],
       ),
     );
   }
 }
 
-
-class LessonProgress {
+class LessonProgress extends StatelessWidget {
   final String lessonName;
-  final int lessonNumber;
-  final double progress;
-  final double wordsProgress;
-  final List<Level> levels;  // Now a list of Level objects, not strings
+  final List<Level> levels; // Now a list of Level objects, not strings
 
   LessonProgress({
     required this.lessonName,
-    required this.lessonNumber,
-    required this.progress,
-    required this.wordsProgress,
     required this.levels,
   });
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    throw UnimplementedError();
+  }
 }
 
-class Level {
+class Level extends StatelessWidget {
   String name;
   String subLevel;
   List<String> details; // Assume 'details' are a list of strings
 
-  Level({required this.name,required this.subLevel, required this.details});
-}
+  Level({required this.name, required this.subLevel, required this.details});
 
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    throw UnimplementedError();
+  }
+}
 class LessonButton extends StatelessWidget {
   final LessonProgress lesson;
   final bool isExpanded;
@@ -195,19 +294,26 @@ class LessonButton extends StatelessWidget {
           initiallyExpanded: isExpanded,
           onExpansionChanged: onExpansionChanged,
           title: Row(
-            children: [ // Additional icon
+            children: [
+              // Additional icon
               SizedBox(width: 10), // Space between icons
-              Expanded(child: Text(
-                lesson.lessonName,
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
-              )),
+              Expanded(
+                  child: Text(
+                    lesson.lessonName,
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
+                  )),
             ],
           ),
           iconColor: Colors.white,
           collapsedIconColor: Colors.white,
           backgroundColor: mainColor,
           collapsedBackgroundColor: mainColor,
-          children: lesson.levels.map((level) => _buildNestedExpansionTile(level)).toList(),
+          children: lesson.levels
+              .map((level) => _buildNestedExpansionTile(level))
+              .toList(),
         ),
       ),
     );
@@ -221,30 +327,21 @@ class LessonButton extends StatelessWidget {
             icon: Icon(Icons.add, color: Colors.white),
             onPressed: () {
               // Add your desired functionality here
-              print('Adding detail for: ${level.name} ${level.subLevel}');
+              print('Adding detail for: ${level.name}');
             },
           ),
           SizedBox(width: 8), // Space between the icon and text
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(level.name, style: TextStyle(color: Colors.white)),
-              Text(level.subLevel, style: TextStyle(color: Colors.white, fontSize: 16)),
-            ],
-          ),
+          Text(level.name, style: TextStyle(color: Colors.white)),
         ],
       ),
       backgroundColor: mainColor,
       iconColor: Colors.white,
       collapsedIconColor: Colors.white,
-      children: level.details.map((detail) => ListTile(
+      children: level.details
+          .map((detail) => ListTile(
         title: Text(detail, style: TextStyle(color: Colors.white)),
-      )).toList(),
+      ))
+          .toList(),
     );
   }
-
 }
-
-
-
-
