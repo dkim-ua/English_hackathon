@@ -41,6 +41,7 @@ class WordSetPageState extends State<WordSetPage> {
       await fetchWordSetsByLevel("BEGINNER");
       await fetchWordSetsByLevel("INTERMEDIATE");
       await fetchWordSetsByLevel("ADVANCED");
+      print(wordSetLevelsForBeginner.toString());
       createLessonProgressList(); // Assuming this sets up lessonProgressList properly
     } catch (e) {
       print("Error fetching data: $e");
@@ -153,7 +154,7 @@ class WordSetPageState extends State<WordSetPage> {
 
 LessonProgress createLessonProgress(
     String lvl, List<dynamic> wordSetLvl) {
-  List<Level> levels = List.empty();
+  List<Level> levels = List.empty(growable: true);
 
   for (var item in wordSetLvl) {
     var parts = item.split(', ');
@@ -261,9 +262,9 @@ class LessonProgress extends StatelessWidget {
 }
 
 class Level extends StatelessWidget {
-  String name;
-  String subLevel;
-  List<String> details; // Assume 'details' are a list of strings
+  dynamic name;
+  dynamic subLevel;
+  List<dynamic> details; // Assume 'details' are a list of strings
 
   Level({required this.name, required this.subLevel, required this.details});
 
@@ -333,7 +334,13 @@ class LessonButton extends StatelessWidget {
             },
           ),
           SizedBox(width: 8), // Space between the icon and text
-          Text(level.name, style: TextStyle(color: Colors.white)),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(level.name, style: TextStyle(color: Colors.white)),
+              Text(level.subLevel, style: TextStyle(color: Colors.white, fontSize: 16)),
+            ],
+          ),
         ],
       ),
       backgroundColor: mainColor,
