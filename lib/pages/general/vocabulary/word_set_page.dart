@@ -179,7 +179,7 @@ LessonProgress createLessonProgress(
       });
     }
   }
-
+  levels.sort((a,b) => a.name.compareTo(b.name));
   return LessonProgress(lessonName: lvl, levels: levels,);
 }
 
@@ -288,6 +288,11 @@ class LessonButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<Level> sortedLevels = lesson.levels.toList()
+      ..sort((a, b) => a.name.compareTo(b.name) != 0
+          ? a.name.compareTo(b.name)
+          : a.subLevel.compareTo(b.subLevel));
+
     return Card(
       margin: EdgeInsets.all(16.0),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -314,7 +319,7 @@ class LessonButton extends StatelessWidget {
           collapsedIconColor: Colors.white,
           backgroundColor: mainColor,
           collapsedBackgroundColor: mainColor,
-          children: lesson.levels
+          children: sortedLevels
               .map((level) => _buildNestedExpansionTile(level))
               .toList(),
         ),
@@ -329,8 +334,7 @@ class LessonButton extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.add, color: Colors.white),
             onPressed: () {
-              // Add your desired functionality here
-              print('Adding detail for: ${level.name}');
+              WordSetPageState.addWordsFromWordSet(1, level.name + ", " +level.subLevel);
             },
           ),
           SizedBox(width: 8), // Space between the icon and text
