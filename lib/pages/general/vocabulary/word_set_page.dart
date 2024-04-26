@@ -37,22 +37,18 @@ class WordSetPageState extends State<WordSetPage> {
 
   Future<void> fetchData() async {
     try {
-      fetchWordSetsByLevel("BEGINNER");
-      fetchWordSetsByLevel("INTERMEDIATE");
-      fetchWordSetsByLevel("ADVANCED");
-      isLoading = false;
-      print(wordSetLevelsForBeginner);
-      print(wordSetLevelsForIntermediate);
-      print(wordSetLevelsForAdvance);
-
-      // createLessonProgressList();
+      setState(() { isLoading = true; });
+      await fetchWordSetsByLevel("BEGINNER");
+      await fetchWordSetsByLevel("INTERMEDIATE");
+      await fetchWordSetsByLevel("ADVANCED");
+      createLessonProgressList(); // Assuming this sets up lessonProgressList properly
     } catch (e) {
       print("Error fetching data: $e");
-      setState(() {
-        isLoading = false;
-      });
+    } finally {
+      setState(() { isLoading = false; });
     }
   }
+
 
   static List<LessonProgress> lessonProgressList = [
     createLessonProgress("BEGINNER", wordSetLevelsForBeginner),
@@ -64,23 +60,28 @@ class WordSetPageState extends State<WordSetPage> {
     setState(() {
       lessonProgressList = [
         createLessonProgress("BEGINNER", wordSetLevelsForBeginner),
-        createLessonProgress(
-            "INTERMEDIATE", wordSetLevelsForIntermediate),
+        createLessonProgress("INTERMEDIATE", wordSetLevelsForIntermediate),
         createLessonProgress("ADVANCED", wordSetLevelsForAdvance)
       ];
     });
   }
 
+
   static Future<void> fetchWordSetsByLevel(String level) async {
-    final response = await http
-        .get(Uri.http(baseIP, '/api/v1/word-set/get-word-sets-by-level', {
+    final response = await http.get(Uri.http(baseIP, '/api/v1/word-set/get-word-sets-by-level', {
       'english-level': level,
     }));
 
     try {
       if (response.statusCode == 200) {
-        wordSetLevelsForBeginner = jsonDecode(response.body);
-        lessonProgressList.add(createLessonProgress(level, wordSetLevelsForBeginner));
+        var fetchedWordSets = jsonDecode(response.body);
+        if (level == "BEGINNER") {
+          wordSetLevelsForBeginner = fetchedWordSets;
+        } else if (level == "INTERMEDIATE") {
+          wordSetLevelsForIntermediate = fetchedWordSets;
+        } else if (level == "ADVANCED") {
+          wordSetLevelsForAdvance = fetchedWordSets;
+        }
       } else {
         throw Exception('Failed to load data');
       }
@@ -88,6 +89,7 @@ class WordSetPageState extends State<WordSetPage> {
       throw Exception('Failed to load data $e');
     }
   }
+
 
   static Future<List<dynamic>> fetchWordSetByName(String name) async {
     final response =
