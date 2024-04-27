@@ -109,14 +109,15 @@ class WordSetPageState extends State<WordSetPage> {
     }
   }
 
-  static Future<int> addWordsFromWordSet(int userId, String name) async {
+  static Future<bool> addWordsFromWordSet(int userId, String name, bool isAdd) async {
     final response = await http
         .post(Uri.http(baseIP, '/api/v1/user/add-words-from-word-set', {
       'user-id': userId.toString(),
       'name': name,
     }));
     try {
-      return response.statusCode;
+      isAdd = response.statusCode == 201;
+      return isAdd;
     } catch (e) {
       throw Exception('Failed to load data $e');
     }
@@ -328,20 +329,19 @@ class LessonButton extends StatelessWidget {
 
   Widget _buildNestedExpansionTile(Level level, BuildContext context) {
     // Pass context as an argument
-
+    bool isAdd = false;
     return ExpansionTile(
       title: Row(
         children: [
           IconButton(
             icon: Icon(Icons.add, color: Colors.white),
             onPressed: () {
-              WordSetPageState.addWordsFromWordSet(1, level.name + ", " + level.subLevel);
+              WordSetPageState.addWordsFromWordSet(1, level.name + ", " + level.subLevel, isAdd);
               // Show SnackBar after data operation is complete (optional)
               ScaffoldMessenger.of(context)
                   .showSnackBar( // Use ScaffoldMessenger.showSnackBar
                 SnackBar(
-                  content: Text(
-                      'Words added from ${level.name}, ${level.subLevel}'),
+                  content: Text(isAdd? 'Words added from ${level.name}, ${level.subLevel}' : "this word set already added"),
                   duration: Duration(milliseconds: 500),
                 ),
               );
