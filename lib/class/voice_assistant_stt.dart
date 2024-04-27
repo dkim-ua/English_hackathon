@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'package:english_hakaton/class/voise_assistant_tts.dart';
-import 'package:flutter_sound/flutter_sound.dart';
-import 'package:google_speech/endless_streaming_service.dart';
+import 'package:flutter/services.dart';
 import 'package:google_speech/google_speech.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:sound_stream/sound_stream.dart';
+import 'package:http/http.dart' as http;
 
 import 'constant.dart';
 
@@ -13,18 +13,22 @@ const int kAudioSampleRate = 16000;
 const int kAudioNumChannels = 1;
 
 class VoiceAssistantSpeechToText {
-  VoiceAssistantSpeechToText(this.language);
+  VoiceAssistantSpeechToText({required this.language, required this.enumCurrentState});
 
-  late String language;
+
+  String language;
+  String enumCurrentState;
   final RecorderStream _recorder = RecorderStream();
-  late VoiceAssistantTextToSpeech voiceAssistantTextToSpeech;
   bool recognizing = false;
   bool recognizeFinished = false;
   String text = '';
   StreamSubscription<List<int>>? _audioStreamSubscription;
   BehaviorSubject<List<int>>? _audioStream;
 
-  void streamingRecognize() async {
+  Future<void> streamingRecognize() async {
+    voiceAssistantTextToSpeech.stop();
+    HapticFeedback.vibrate();
+    print('start');
     _audioStream = BehaviorSubject<List<int>>();
     _audioStreamSubscription = _recorder.audioStream.listen((event) {
       _audioStream!.add(event);
@@ -73,12 +77,16 @@ class VoiceAssistantSpeechToText {
   }
 
 
-  void stopRecording() async {
+  Future<String> stopRecording() async {
+    await Future.delayed(const Duration(seconds: 1));
+    HapticFeedback.vibrate();
     await _recorder.stop();
     await _audioStreamSubscription?.cancel();
     await _audioStream?.close();
       recognizing = false;
-      voiceAssistantTextToSpeech.speak(text, languages[0]);
+      print(text);
+      print('end');
+    return _sstFetchData();
   }
 
   RecognitionConfig _getConfig(String language) =>
@@ -89,4 +97,31 @@ class VoiceAssistantSpeechToText {
           sampleRateHertz: 16000,
           languageCode: language
       );
+
+  bool getRecognizing(){
+    return recognizing;
+  }
+
+  Future<String> _sstFetchData() async {
+    final response = await http.get(Uri.http(baseIP, '/api/v1/voice-assistant/get-next-state', {
+      'currentState': enumCurrentState, // Replace with your chatId
+      'request': text, // Replace with your userId
+    }));
+
+    try {
+      if (response.statusCode == 200) {
+        //Map<String, dynamic> jsonResponseChat = jsonDecode(response.body);
+
+        print('Ответ сервера: ${response.body}');
+        var answer = response.body;
+        return answer;
+      } else {
+        return 'Error: ${response.statusCode}';
+      }
+    } catch (e) {
+      return 'Error during the request: $e';
+    }
+  }
+
+
 }

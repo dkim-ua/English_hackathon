@@ -49,6 +49,7 @@ dependencies:
   google_speech: ^5.2.0+1
   flutter_sound: ^9.4.6
   sound_stream: ^0.4.1
+  just_audio: ^0.9.37
 
 dev_dependencies:
   flutter_test:
@@ -95,6 +96,8 @@ flutter:
     - lib/images/reading_training_icon.png
     - lib/images/speaking_training_icon.png
     - lib/images/writing_training_icon.png
+    - audio/start_stream.mp3
+    - audio/stop_record.mp3
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

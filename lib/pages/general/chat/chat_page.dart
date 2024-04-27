@@ -4,6 +4,8 @@ import 'package:auto_route/annotations.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:english_hakaton/class/chat.dart';
 import 'package:english_hakaton/class/voice_assistant_stt.dart';
+import 'package:english_hakaton/enums/enum_responses_current_state.dart';
+import 'package:english_hakaton/pages/general/general_page.dart';
 import 'package:english_hakaton/route/route.gr.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
@@ -12,9 +14,8 @@ import 'package:http/http.dart' as http;
 import 'package:shake/shake.dart';
 
 import '../../../class/constant.dart';
-import '../../../class/voise_assistant_tts.dart';
+import '../../../theme/micro_button.dart';
 
-const String baseIP = '192.168.137.1:7050';
 String textStt = '';
 late VoiceAssistantSpeechToText voiceAssistantSpeechToText;
 
@@ -22,6 +23,7 @@ late VoiceAssistantSpeechToText voiceAssistantSpeechToText;
 class ChatPage extends StatefulWidget {
   final String subtitle;
   final String chatType;
+
   const ChatPage({super.key, required this.subtitle, required this.chatType});
 
   @override
@@ -44,24 +46,31 @@ class _ChatPageState extends State<ChatPage> {
     ShakeDetector detector = ShakeDetector.autoStart(
       onPhoneShake: () {
         // Do stuff on phone shake
-        context.router.back();
+        isOnThisScreen = true;
+        context.router.replace(const GeneralRoute());
       },
-      minimumShakeCount: 1,
+      minimumShakeCount: 2,
       shakeSlopTimeMS: 500,
       shakeCountResetTime: 3000,
       shakeThresholdGravity: 2.7,
     );
-    voiceAssistantSpeechToText = VoiceAssistantSpeechToText(languages[0]);
+    voiceAssistantSpeechToText = VoiceAssistantSpeechToText(
+        language: languages[0],
+        enumCurrentState: EnumResponseCurrentState.chatAssistant.serverType());
+
+    ///TODO!!!!!!!!!!!!!!!!
     _initChat();
   }
 
   Future<void> _initChat() async {
+    await ttsSpeakStart();
     ChatModel? fetchedChat = await firstMessage(widget.chatType);
     setState(() {
       chat = fetchedChat;
-      _answer(chat?.textMessege); // Only call this after ensuring chat is not null
+      _answer(chat?.textMessege,
+          languages[0]); // Only call this after ensuring chat is not null
     });
-    }
+  }
 
   void _question(types.PartialText message) {
     if (_isProcessing) {
@@ -69,12 +78,6 @@ class _ChatPageState extends State<ChatPage> {
     }
 
     _isProcessing = true;
-
-    if (chat != null) {
-      fetchData(message.text).then((textMessage) {
-        chat!.textMessege = textMessage;
-      });
-    }
 
     final textMessage = types.TextMessage(
       author: _user,
@@ -86,20 +89,31 @@ class _ChatPageState extends State<ChatPage> {
     setState(() {
       _messages.insert(0, textMessage);
     });
-
-    fetchData(message.text).then((answer) {
-      _answer(answer);
-      _isProcessing = false; // Снимаем флаг после получения ответа
-      setState(() {}); // Обновляем состояние для перерисовки интерфейса
-    }).catchError((error) {
-      _isProcessing = false; // Снимаем флаг в случае ошибки
-      setState(() {}); // Обновляем состояние для перерисовки интерфейса
-      print('Ошибка при отправке сообщения: $error');
-    });
-
+    if (isVoiceAssistant) {
+      print("SENDING " + message.text + "ON BACKEND");
+      fetchData(message.text).then((answer) {
+        _answer(
+            answer,
+            message.text.toLowerCase().contains('translate')
+                ? languages[1]
+                : languages[0]);
+        _isProcessing = false; // Снимаем флаг после получения ответа
+        setState(() {}); // Обновляем состояние для перерисовки интерфейса
+      }).catchError((error) {
+        _isProcessing = false; // Снимаем флаг в случае ошибки
+        setState(() {}); // Обновляем состояние для перерисовки интерфейса
+        print('Ошибка при отправке сообщения: $error');
+      });
+    } else {
+      if (chat != null) {
+        fetchData(message.text).then((textMessage) {
+          chat!.textMessege = textMessage;
+        });
+      }
+    }
   }
 
-  void _answer(String answerText) {
+  void _answer(String answerText, String language) {
     final textMessage = types.TextMessage(
       author: _user2,
       createdAt: DateTime.now().millisecondsSinceEpoch,
@@ -109,53 +123,71 @@ class _ChatPageState extends State<ChatPage> {
 
     setState(() {
       _messages.insert(0, textMessage); // Вставляем ответ от сервера
-      ttsSpeak(textMessage.toString(), languages[0]);
+      ttsSpeak(textMessage.text, language);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(widget.subtitle)),
-      body: Stack(
-        children: [
-          Chat(
-            messages: _messages,
-            onSendPressed: _question,
-            user: _user,
-          ),
-          ElevatedButton(
-            onPressed: processVoice,
-            child: voiceAssistantSpeechToText.recognizing
-                ? const Text('Stop recording')
-                : const Text('Start Streaming from mic'),
-          ),
-          if (_isProcessing)  // Correct usage of collection if
-            Positioned(
-              child: Container(
-                alignment: Alignment.center,
-                color: Colors.black54,
-                child: CircularProgressIndicator(),
+    return Stack(
+      children: [
+        Scaffold(
+          appBar: AppBar(title: Text(widget.subtitle)),
+          body: Stack(
+            children: [
+              Chat(
+                messages: _messages,
+                onSendPressed: _question,
+                user: _user,
               ),
-            ),
-        ],
-      ),
+              if (_isProcessing) // Correct usage of collection if
+                Positioned(
+                  child: Container(
+                    alignment: Alignment.center,
+                    color: Colors.black54,
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+            ],
+          ),
+        ),
+        // ElevatedButton(
+        //   onPressed: processVoice,
+        //   child: voiceAssistantSpeechToText.getRecognizing()
+        //       ? const Text('Stop recording')
+        //       : const Text('Start Streaming from mic'),
+        // ),
+        isVoiceAssistant
+            ? MicroButton(
+          voiceAssistantSpeechToText: voiceAssistantSpeechToText,
+          onTap: () {
+            processVoice();
+          },
+        )
+            : const SizedBox()
+      ],
     );
   }
-  void processVoice(){
-    voiceAssistantSpeechToText.recognizing
-        ? voiceAssistantSpeechToText.stopRecording
-        : voiceAssistantSpeechToText.streamingRecognize;
-    _question(voiceAssistantSpeechToText.text as types.PartialText);
+
+  Future<void> processVoice() async {
+    if (voiceAssistantSpeechToText.getRecognizing()) {
+      // Stop the recording and wait for it to complete
+      await voiceAssistantSpeechToText.stopRecording();
+      if (voiceAssistantSpeechToText.text.isNotEmpty) {
+        // Process the recognized text only if it is not empty
+        final partialText = types.PartialText(text: voiceAssistantSpeechToText.text);
+        _question(partialText); // Handle the question with the recognized text
+      }
+    } else {
+      // Start recording and do not proceed until it's started
+      await voiceAssistantSpeechToText.streamingRecognize();
+    }
   }
 }
 
 Future<ChatModel> firstMessage(String theme) async {
   var url = Uri.parse('http://$baseIP/api/v1/chat-assistant/new-chat');
-  var params = {
-    'theme': theme,
-    'user_id': '1'
-  };
+  var params = {'theme': theme, 'user_id': '1'};
 
   try {
     var response = await http.post(
@@ -166,7 +198,8 @@ Future<ChatModel> firstMessage(String theme) async {
       Map<String, dynamic> jsonResponseChat = jsonDecode(response.body);
 
       print('Ответ сервера: $jsonResponseChat');
-      var chatModel = ChatModel(jsonResponseChat["chat-id"], jsonResponseChat["message"]);
+      var chatModel =
+          ChatModel(jsonResponseChat["chat-id"], jsonResponseChat["message"]);
       return chatModel;
     } else {
       return ChatModel(0, 'Ошибка: ${response.statusCode}');
@@ -177,7 +210,8 @@ Future<ChatModel> firstMessage(String theme) async {
 }
 
 Future<String> fetchData(String newMessageText) async {
-  final response = await http.get(Uri.http(baseIP, '/api/v1/chat-assistant/get-response', {
+  final response =
+      await http.get(Uri.http(baseIP, '/api/v1/chat-assistant/get-response', {
     'chat-id': chat?.chatId.toString(), // Replace with your chatId
     'user-id': '1', // Replace with your userId
     'new-message-text': newMessageText, // Replace with your message text
@@ -198,7 +232,18 @@ Future<String> fetchData(String newMessageText) async {
   }
 }
 
-void ttsSpeak(String text, String language){
+Future<void> ttsSpeakStart() async {
+  if (isVoiceAssistant == true) {
+    await voiceAssistantTextToSpeech.speak(
+        'Чат обрано! Щоб повернутися на головну - потрясіть екраном! Чат працює тільки англійською мовою скажіть', languages[1]);
+    voiceAssistantTextToSpeech.speak('translate', languages[0]);
+    await voiceAssistantTextToSpeech.stop();
+    voiceAssistantTextToSpeech.speak('для отримання перекладу', languages[1]);
+    await voiceAssistantTextToSpeech.stop();
+  }
+}
+
+void ttsSpeak(String text, String language) {
   if (isVoiceAssistant == true) {
     voiceAssistantTextToSpeech.speak(text, language);
   }

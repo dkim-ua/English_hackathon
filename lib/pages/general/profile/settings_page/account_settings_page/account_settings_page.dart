@@ -21,10 +21,12 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    voiceAssistantSpeechToText = VoiceAssistantSpeechToText(languages[0]);
+    voiceAssistantSpeechToText = VoiceAssistantSpeechToText(
+        language: languages[1],
+        enumCurrentState: '');
     ttsSpeakStart();
   }
-  final TextEditingController _nameController = TextEditingController(text: 'Баклажан');
+  final TextEditingController _nameController = TextEditingController(text: 'Валерія');
   final TextEditingController _emailController = TextEditingController(text: 'mva9727@gmail.com');
   int _age = 19;
 

@@ -1,4 +1,5 @@
 import 'package:auto_route/annotations.dart';
+import 'package:english_hakaton/enums/enum_current_state.dart';
 import 'package:english_hakaton/theme/main_theme.dart';
 import 'package:flutter/material.dart';
 
@@ -22,7 +23,9 @@ class _TrainingPageState extends State<TrainingPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    voiceAssistantSpeechToText = VoiceAssistantSpeechToText(languages[1]);
+    voiceAssistantSpeechToText = VoiceAssistantSpeechToText(
+        language: languages[1],
+        enumCurrentState: EnumCurrentState.courseCurrentState.serverType());
     ttsSpeakStart();
   }
 

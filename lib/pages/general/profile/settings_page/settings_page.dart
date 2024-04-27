@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 
 import '../../../../class/constant.dart';
 import '../../../../class/voice_assistant_stt.dart';
-import '../../../../class/voise_assistant_tts.dart';
 import '../../../../theme/main_theme.dart';
 
 late VoiceAssistantSpeechToText voiceAssistantSpeechToText;
@@ -23,7 +22,9 @@ class _SettingsPageState extends State<SettingsPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    voiceAssistantSpeechToText = VoiceAssistantSpeechToText(languages[0]);
+    voiceAssistantSpeechToText = VoiceAssistantSpeechToText(
+        language: languages[1],
+        enumCurrentState: '');
     ttsSpeakStart();
   }
   @override
@@ -83,7 +84,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       child: Text('DN'),
                     ),
                     title: Text(
-                      'David Negr',
+                      'Валерія',
                       style: settingsElementsTextStyle,
                     ),
                     trailing: const Icon(Icons.arrow_forward_ios),
@@ -123,9 +124,9 @@ class _SettingsPageState extends State<SettingsPage> {
                       'Асистент',
                       style: settingsElementsTextStyle,
                     ),
-                    value: true, // Set the initial value
+                    value: false, // Set the initial value
                     onChanged: (bool value) {
-                      value=false;// Handle assistant toggle
+                      value ? print('...'):value = true; isVoiceAssistant = true; context.router.replace(const GeneralRoute());
                     },
                   ),
                   ListTile(

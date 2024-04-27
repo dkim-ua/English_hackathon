@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 
+import 'constant.dart';
+
 enum TtsState { playing, stopped, paused, continued }
 
 class VoiceAssistantTextToSpeech{
@@ -64,6 +66,11 @@ class VoiceAssistantTextToSpeech{
       ttsState = TtsState.stopped;
     });
 
+  }
+
+  void ttsUndefined(){
+    stop();
+    speak('Я вас не зрозумів, повторіть будь ласка', languages[1]);
   }
 
   Future<dynamic> _getLanguages() async => await flutterTts.getLanguages;

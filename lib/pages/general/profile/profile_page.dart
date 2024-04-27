@@ -1,3 +1,4 @@
+import 'package:english_hakaton/enums/enum_current_state.dart';
 import 'package:english_hakaton/theme/main_theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -52,7 +53,9 @@ class ClassSectionState extends State<ClassSection> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    voiceAssistantSpeechToText = VoiceAssistantSpeechToText(languages[1]);
+    voiceAssistantSpeechToText = VoiceAssistantSpeechToText(
+        language: languages[1],
+        enumCurrentState: EnumCurrentState.courseCurrentState.serverType());
     ttsSpeakStart();
   }
 
@@ -132,7 +135,7 @@ class SalesData {
 
 void ttsSpeakStart(){
   ttsSpeak("Ви знаходитесь на сторінці Вашого профіля. "
-      "Ви хочете дізнатись інформацію щодо свого профілю чи функціонал сторінки", languages[1]);
+      "Ваш рівень - інтермедіейт. Юніт 1 - пройдено на 35 відсотків. Чи бажаєте перейти в налаштування?", languages[1]);
 }
 void ttsSpeak(String text, String language){
   if (isVoiceAssistant == true) {

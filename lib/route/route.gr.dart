@@ -116,7 +116,7 @@ class AccountSettingsRoute extends _i11.PageRouteInfo<void> {
 /// generated route for
 /// [_i2.ChatPage]
 class ChatRoute extends _i11.PageRouteInfo<ChatRouteArgs> {
-  ChatRoute({
+ChatRoute({
     _i12.Key? key,
     required String subtitle,
     required String chatType,

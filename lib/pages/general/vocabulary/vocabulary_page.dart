@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:english_hakaton/enums/enum_current_state.dart';
 import 'package:english_hakaton/theme/main_theme.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
@@ -20,7 +21,6 @@ class VocabularyPage extends StatefulWidget {
 }
 
 class _VocabularyPageState extends State<VocabularyPage> {
-  static const String baseIP = '192.168.137.1:7050';
   Map<String, dynamic> wordsMapResponse = {};
   bool isLoading = true;
 
@@ -40,7 +40,9 @@ class _VocabularyPageState extends State<VocabularyPage> {
         print('Error: $e');
       }
     }();
-    voiceAssistantSpeechToText = VoiceAssistantSpeechToText(languages[1]);
+    voiceAssistantSpeechToText = VoiceAssistantSpeechToText(
+        language: languages[1],
+        enumCurrentState: EnumCurrentState.courseCurrentState.serverType());
     ttsSpeakStart();
   }
 
