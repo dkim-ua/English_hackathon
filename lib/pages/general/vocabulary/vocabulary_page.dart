@@ -22,6 +22,7 @@ class _VocabularyPageState extends State<VocabularyPage> {
   final int wordsToStudy = 130;
   final int wordsToRepeat = 73;
   int pageCount = 0;
+  static int needPage = 1;
   Map<String, bool> buttonPressed = {};
   String? activeButton;
 
@@ -77,7 +78,7 @@ class _VocabularyPageState extends State<VocabularyPage> {
         centerTitle: true,
       ),
       body: FutureBuilder<Map<String, dynamic>>(
-        future: fetchData(1, 10),
+        future: fetchData(needPage, 10),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
@@ -226,6 +227,7 @@ Widget _navigationButton(BuildContext context, String page) {
           activeButton = null; // Deselect if already active
         } else {
           activeButton = page; // Set as active
+          needPage = int.parse(page);
         }
       });
     },
