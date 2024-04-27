@@ -4,7 +4,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:english_hakaton/route/route.gr.dart';
 import 'package:english_hakaton/theme/main_theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:http/http.dart' as http;
 
 @RoutePage()
@@ -27,6 +26,7 @@ class WordSetPageState extends State<WordSetPage> {
 
 // Define the isLoading flag
   bool isLoading = true;
+  static bool isAdd = false;
 
   @override
   void initState() {
@@ -109,15 +109,14 @@ class WordSetPageState extends State<WordSetPage> {
     }
   }
 
-  static Future<bool> addWordsFromWordSet(int userId, String name, bool isAdd) async {
+  static Future<void> addWordsFromWordSet(int userId, String name) async {
     final response = await http
         .post(Uri.http(baseIP, '/api/v1/user/add-words-from-word-set', {
       'user-id': userId.toString(),
       'name': name,
     }));
     try {
-      isAdd = response.statusCode == 201;
-      return isAdd;
+        WordSetPageState.isAdd = response.statusCode==201;
     } catch (e) {
       throw Exception('Failed to load data $e');
     }
@@ -328,26 +327,50 @@ class LessonButton extends StatelessWidget {
   }
 
   Widget _buildNestedExpansionTile(Level level, BuildContext context) {
-    // Pass context as an argument
-    bool isAdd = false;
     return ExpansionTile(
       title: Row(
         children: [
           IconButton(
             icon: Icon(Icons.add, color: Colors.white),
-            onPressed: () {
-              WordSetPageState.addWordsFromWordSet(1, level.name + ", " + level.subLevel, isAdd);
-              // Show SnackBar after data operation is complete (optional)
+            onPressed: () async {
+              // Show the circular loader
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (BuildContext context) {
+                  return Dialog(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          CircularProgressIndicator(),
+                          SizedBox(height: 16.0),
+                          Text('Loading...'),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              );
+
+              await WordSetPageState.addWordsFromWordSet(1, level.name + ", " + level.subLevel);
+
+              // Close the circular loader
+              Navigator.of(context).pop();
+
+              // Show the SnackBar
               ScaffoldMessenger.of(context)
-                  .showSnackBar( // Use ScaffoldMessenger.showSnackBar
+                  .showSnackBar(
                 SnackBar(
-                  content: Text(isAdd? 'Words added from ${level.name}, ${level.subLevel}' : "this word set already added"),
+                  content: Text(
+                      WordSetPageState.isAdd ? 'Words added from ${level.name}, ${level.subLevel}' : "this word set already added"),
                   duration: Duration(milliseconds: 500),
                 ),
               );
             },
           ),
-          SizedBox(width: 8), // Space between the icon and text
+          SizedBox(width: 8),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -359,7 +382,6 @@ class LessonButton extends StatelessWidget {
         ],
       ),
       backgroundColor: mainColor,
-      // Ensure 'mainColor' is defined elsewhere in your code
       iconColor: Colors.white,
       collapsedIconColor: Colors.white,
       children: level.details

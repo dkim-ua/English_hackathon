@@ -45,7 +45,7 @@ class _VocabularyPageState extends State<VocabularyPage> {
     }));
 
     if (response.statusCode == 200) {
-      //////////////////////////////////////////////////////////print(jsonDecode(response.body));
+      print(jsonDecode(response.body));
       return jsonDecode(response.body);
     } else {
       throw Exception('Failed to load data');
@@ -60,6 +60,7 @@ class _VocabularyPageState extends State<VocabularyPage> {
     try {
       if (response.statusCode == 200) {
         pageCount = int.parse(response.body);
+        print('${pageCount}' + " pages");
       } else {
         throw Exception('Failed to load data');
       }
@@ -83,7 +84,7 @@ class _VocabularyPageState extends State<VocabularyPage> {
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text('No data found'));
+            return _buildUserInfoSection();
           }
 
           Map<String, dynamic> wordsMapResponse = snapshot.data!;
