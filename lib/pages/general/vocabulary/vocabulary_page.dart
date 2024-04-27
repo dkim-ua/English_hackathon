@@ -24,7 +24,7 @@ class _VocabularyPageState extends State<VocabularyPage> {
   int pageCount = 0;
   static int needPage = 1;
   Map<String, bool> buttonPressed = {};
-  String? activeButton;
+  String? activeButton = "1";
 
   @override
   void initState() {
