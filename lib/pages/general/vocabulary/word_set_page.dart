@@ -115,7 +115,6 @@ class WordSetPageState extends State<WordSetPage> {
       'user-id': userId.toString(),
       'name': name,
     }));
-
     try {
       return response.statusCode;
     } catch (e) {
@@ -267,7 +266,6 @@ class Level extends StatelessWidget {
   List<dynamic> details; // Assume 'details' are a list of strings
 
   Level({required this.name, required this.subLevel, required this.details});
-
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -289,7 +287,8 @@ class LessonButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Level> sortedLevels = lesson.levels.toList()
-      ..sort((a, b) => a.name.compareTo(b.name) != 0
+      ..sort((a, b) =>
+      a.name.compareTo(b.name) != 0
           ? a.name.compareTo(b.name)
           : a.subLevel.compareTo(b.subLevel));
 
@@ -320,21 +319,32 @@ class LessonButton extends StatelessWidget {
           backgroundColor: mainColor,
           collapsedBackgroundColor: mainColor,
           children: sortedLevels
-              .map((level) => _buildNestedExpansionTile(level))
+              .map((level) => _buildNestedExpansionTile(level,context))
               .toList(),
         ),
       ),
     );
   }
 
-  Widget _buildNestedExpansionTile(Level level) {
+  Widget _buildNestedExpansionTile(Level level, BuildContext context) {
+    // Pass context as an argument
+
     return ExpansionTile(
       title: Row(
         children: [
           IconButton(
             icon: Icon(Icons.add, color: Colors.white),
             onPressed: () {
-              WordSetPageState.addWordsFromWordSet(1, level.name + ", " +level.subLevel);
+              WordSetPageState.addWordsFromWordSet(1, level.name + ", " + level.subLevel);
+              // Show SnackBar after data operation is complete (optional)
+              ScaffoldMessenger.of(context)
+                  .showSnackBar( // Use ScaffoldMessenger.showSnackBar
+                SnackBar(
+                  content: Text(
+                      'Words added from ${level.name}, ${level.subLevel}'),
+                  duration: Duration(milliseconds: 500),
+                ),
+              );
             },
           ),
           SizedBox(width: 8), // Space between the icon and text
@@ -342,18 +352,21 @@ class LessonButton extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(level.name, style: TextStyle(color: Colors.white)),
-              Text(level.subLevel, style: TextStyle(color: Colors.white, fontSize: 16)),
+              Text(level.subLevel,
+                  style: TextStyle(color: Colors.white, fontSize: 16)),
             ],
           ),
         ],
       ),
       backgroundColor: mainColor,
+      // Ensure 'mainColor' is defined elsewhere in your code
       iconColor: Colors.white,
       collapsedIconColor: Colors.white,
       children: level.details
-          .map((detail) => ListTile(
-        title: Text(detail, style: TextStyle(color: Colors.white)),
-      ))
+          .map((detail) =>
+          ListTile(
+            title: Text(detail, style: TextStyle(color: Colors.white)),
+          ))
           .toList(),
     );
   }

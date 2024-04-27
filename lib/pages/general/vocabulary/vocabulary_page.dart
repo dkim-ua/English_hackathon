@@ -15,8 +15,8 @@ class VocabularyPage extends StatefulWidget {
 class _VocabularyPageState extends State<VocabularyPage> {
   static const String baseIP = '91.199.45.37:7050';
 // 91.199.45.37:7050
-  final String userName = 'DAVID NEGR';
-  final String userCourse = 'Lera Mais';
+  final String userName = 'VOCABULARY';
+  final String userCourse = 'USER';
   final int wordsLearned = 210;
   final int totalWords = 270;
   final int wordsToStudy = 130;
@@ -45,6 +45,7 @@ class _VocabularyPageState extends State<VocabularyPage> {
     }));
 
     if (response.statusCode == 200) {
+      //////////////////////////////////////////////////////////print(jsonDecode(response.body));
       return jsonDecode(response.body);
     } else {
       throw Exception('Failed to load data');
@@ -75,7 +76,7 @@ class _VocabularyPageState extends State<VocabularyPage> {
         centerTitle: true,
       ),
       body: FutureBuilder<Map<String, dynamic>>(
-        future: fetchData(1, 15),
+        future: fetchData(1, 10),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
@@ -120,7 +121,7 @@ Widget _buildUserInfoSection() {
         ),
         SizedBox(height: 8),
         Text(
-          'Learned $wordsLearned/$totalWords words',
+          'Learned $wordsLearned/$totalWords words' ,
           style: TextStyle(color: Colors.white),
         ),
         SizedBox(height: 8),
