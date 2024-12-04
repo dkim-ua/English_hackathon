@@ -7,8 +7,8 @@ class AppRouter extends $AppRouter {
   @override
   List<AutoRoute> get routes => [
     /// routes go here
-    AutoRoute(page: StartRoute.page),
-    AutoRoute(page: VoiceAssistantRoute.page, path: '/'),
+    AutoRoute(page: StartRoute.page, path: '/'),
+    AutoRoute(page: VoiceAssistantRoute.page,),
     AutoRoute(page: LoginRoute.page),
     AutoRoute(page: RegisterRoute.page),
     AutoRoute(page: GeneralRoute.page),

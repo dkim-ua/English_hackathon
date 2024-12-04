@@ -101,7 +101,7 @@ void navigationPersonOfChat(BuildContext context) async {
       context.router.replace(ChatRoute(subtitle: 'Taxi driver', chatType: ChatType.taxi.serverType()));
       print('ona skazala TAXI 838');
     case "IN_RESTAURANT":
-      context.router.push(ChatRoute(subtitle: 'Waiter', chatType: ChatType.restaurant.serverType()));
+      context.router.replace(ChatRoute(subtitle: 'Waiter', chatType: ChatType.restaurant.serverType()));
       print('ona skazala HOCHU HAVAT');
     case "IN_INTERVIEW":
       context.router.replace(ChatRoute(subtitle: 'Hiring manager', chatType: ChatType.interview.serverType()));

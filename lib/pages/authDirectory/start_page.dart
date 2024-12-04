@@ -2,7 +2,6 @@ import 'package:auto_route/annotations.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:english_hakaton/class/constant.dart';
-import 'package:english_hakaton/class/voise_assistant_tts.dart';
 import 'package:english_hakaton/enums/enum_current_state.dart';
 import 'package:english_hakaton/route/route.gr.dart';
 import 'package:english_hakaton/theme/main_theme.dart';
@@ -37,9 +36,10 @@ class _StartPageState extends State<StartPage> {
           "Перед тим як промовити команду - натисніть в будь яку точку на екрані Вашого смартфону"
           "Після закінчення промови - ще раз натисніть на екран"
           "Для того щоб вимкнути голосового асистента скажіть - Вимкни голосового асистента"
-          "Чи готові ви перейти далі?", "uk-UA");
+          "Чи готові ви перейти далі?", languages[1]);
     }
   }
+
   final List<Image> carouselItems = [Image.asset('lib/images/slide1.png'), Image.asset('lib/images/slide2.png'), Image.asset('lib/images/slide3.png')];
   @override
   Widget build(BuildContext context) {
