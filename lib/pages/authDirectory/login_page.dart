@@ -35,7 +35,7 @@ class _LoginPageState extends State<LoginPage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               const Text(
-                'LERA PEDIK',
+                'SIGN IN',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 32.0,

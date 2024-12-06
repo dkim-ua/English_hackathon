@@ -74,9 +74,8 @@ class _ChatPageState extends State<ChatPage> {
 
   void _question(types.PartialText message) {
     if (_isProcessing) {
-      return; // Если идет обработка, прерываем выполнение функции
+      return; // Stop further execution if a request is already processing
     }
-
     _isProcessing = true;
 
     final textMessage = types.TextMessage(
@@ -86,31 +85,19 @@ class _ChatPageState extends State<ChatPage> {
       text: message.text,
     );
 
+    // Add the user's message to the chat
     setState(() {
       _messages.insert(0, textMessage);
     });
-    if (isVoiceAssistant) {
-      print("SENDING " + message.text + "ON BACKEND");
-      fetchData(message.text).then((answer) {
-        _answer(
-            answer,
-            message.text.toLowerCase().contains('translate')
-                ? languages[1]
-                : languages[0]);
-        _isProcessing = false; // Снимаем флаг после получения ответа
-        setState(() {}); // Обновляем состояние для перерисовки интерфейса
-      }).catchError((error) {
-        _isProcessing = false; // Снимаем флаг в случае ошибки
-        setState(() {}); // Обновляем состояние для перерисовки интерфейса
-        print('Ошибка при отправке сообщения: $error');
-      });
-    } else {
-      if (chat != null) {
-        fetchData(message.text).then((textMessage) {
-          chat!.textMessege = textMessage;
-        });
-      }
-    }
+
+    fetchData(message.text).then((answer) {
+      _answer(answer, message.text.toLowerCase().contains('translate') ? languages[1] : languages[0]);
+    }).catchError((error) {
+      print('Error sending message: $error');
+    }).whenComplete(() {
+      _isProcessing = false; // Always turn off processing indicator
+      setState(() {}); // Update the UI once operation is complete
+    });
   }
 
   void _answer(String answerText, String language) {
@@ -121,11 +108,13 @@ class _ChatPageState extends State<ChatPage> {
       text: answerText,
     );
 
+    // Update UI to show the assistant's response
     setState(() {
-      _messages.insert(0, textMessage); // Вставляем ответ от сервера
+      _messages.insert(0, textMessage);
       ttsSpeak(textMessage.text, language);
     });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -151,12 +140,6 @@ class _ChatPageState extends State<ChatPage> {
             ],
           ),
         ),
-        // ElevatedButton(
-        //   onPressed: processVoice,
-        //   child: voiceAssistantSpeechToText.getRecognizing()
-        //       ? const Text('Stop recording')
-        //       : const Text('Start Streaming from mic'),
-        // ),
         isVoiceAssistant
             ? MicroButton(
           voiceAssistantSpeechToText: voiceAssistantSpeechToText,

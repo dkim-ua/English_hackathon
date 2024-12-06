@@ -40,7 +40,7 @@ class _RegisterPageState extends State<RegisterPage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               const Text(
-                'LERA PEDIK',
+                'REGISTRATION',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 32.0,
